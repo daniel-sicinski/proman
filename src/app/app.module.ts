@@ -4,26 +4,36 @@ import { AngularFireModule } from "@angular/fire";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { environment } from "../environments/environment";
+import { AppRoutingModule } from "./app.routing.module";
+import { ReactiveFormsModule } from "@angular/forms";
 
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { LandingPageComponent } from "./landing-page/landing-page.component";
+import { AuthComponent } from "./auth/auth.component";
 
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatListModule } from "@angular/material";
-import { AuthComponent } from "./auth/auth.component";
-import { AppRoutingModule } from "./app.routing.module";
+import { MatCardModule } from "@angular/material";
+import { MatFormFieldModule } from "@angular/material";
+import { MatInputModule } from "@angular/material";
+import { MatButtonModule } from "@angular/material";
 
 @NgModule({
   declarations: [AppComponent, LandingPageComponent, AuthComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
     MatToolbarModule,
     MatListModule,
+    MatInputModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatCardModule,
     AppRoutingModule
   ],
   providers: [],
