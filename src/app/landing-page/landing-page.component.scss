@@ -1,0 +1,17 @@
+:host {
+  & mat-nav-list {
+    display: flex;
+    padding-bottom: 5px;
+  }
+
+  & mat-toolbar {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.landing-page-container {
+  height: 100%;
+  background-image: url("../../assets/images/mb-bg-fb-09.png");
+  background-size: cover;
+}
