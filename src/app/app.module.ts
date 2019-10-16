@@ -19,9 +19,10 @@ import { MatFormFieldModule } from "@angular/material";
 import { MatInputModule } from "@angular/material";
 import { MatButtonModule } from "@angular/material";
 import { MatProgressSpinnerModule } from "@angular/material";
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
-  declarations: [AppComponent, LandingPageComponent, AuthComponent],
+  declarations: [AppComponent, LandingPageComponent, AuthComponent, DashboardComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

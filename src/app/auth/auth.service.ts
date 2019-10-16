@@ -5,6 +5,7 @@ import {
   AngularFirestoreCollection
 } from "@angular/fire/firestore";
 import { BehaviorSubject } from "rxjs";
+import { Router } from "@angular/router";
 
 interface AuthData {
   email: string;
@@ -30,7 +31,11 @@ export class AuthService {
   authErrorMessage$ = this.authErrorMessageSubject.asObservable();
   fetchingAuthData$ = this.fetchingAuthData.asObservable();
 
-  constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) {
+  constructor(
+    private afAuth: AngularFireAuth,
+    private afs: AngularFirestore,
+    private router: Router
+  ) {
     this.usersCollection = this.afs.collection<User>("users");
   }
 
@@ -47,7 +52,7 @@ export class AuthService {
       })
       .then(() => {
         this.fetchingAuthData.next(false);
-        // todo > redirect
+        this.router.navigate(["/dashboard"]);
       })
       .catch(err => {
         this.fetchingAuthData.next(false);
@@ -61,10 +66,9 @@ export class AuthService {
     this.fetchingAuthData.next(true);
     this.afAuth.auth
       .signInWithEmailAndPassword(email, password)
-      .then(res => {
+      .then(() => {
         this.fetchingAuthData.next(false);
-        // todo
-        // redirect
+        this.router.navigate(["/dashboard"]);
       })
       .catch(err => {
         this.fetchingAuthData.next(false);
@@ -76,7 +80,7 @@ export class AuthService {
     this.fetchingAuthData.next(true);
     this.afAuth.auth.signOut().then(() => {
       this.fetchingAuthData.next(false);
-      // todo > redirect
+      this.router.navigate(["/auth", "logIn"]);
     });
   }
 }

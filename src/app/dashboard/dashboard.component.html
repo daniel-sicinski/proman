@@ -1,0 +1,24 @@
+<div class="dashboard-container">
+  <mat-toolbar color="primary">
+    <span>Proman</span>
+    <mat-nav-list>
+      <a mat-list-item (click)="onLogOut()">Logout</a>
+    </mat-nav-list>
+  </mat-toolbar>
+  <mat-card class="board-container">
+    <mat-card-header>
+      <mat-card-title class="board-container__title">
+        Your Boards
+      </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content class="board-container__list">
+      <a
+        class="board-container__tile"
+        *ngFor="let board of userBoards$ | async"
+        >{{ board.title }}</a
+      >
+      <a class="board-container__tile">Add new board</a>
+    </mat-card-content>
+  </mat-card>
+</div>

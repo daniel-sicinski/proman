@@ -1,0 +1,57 @@
+:host {
+  & mat-nav-list {
+    display: flex;
+    padding-bottom: 5px;
+  }
+
+  & mat-toolbar {
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 1.5rem 4rem rgba(black, 0.25);
+  }
+}
+
+.dashboard-container {
+  height: 100%;
+  // background-image: url("../../assets/images/mb-bg-fb-09.png");
+  background-color: rgb(233, 233, 233);
+  background-size: cover;
+}
+
+.board-container {
+  margin: 0 auto;
+  max-width: 80rem;
+  margin-top: 3rem;
+  min-height: 50rem;
+  box-shadow: 0 2.5rem 4rem rgba(black, 0.25);
+  background-color: rgb(15, 116, 2);
+  color: rgb(236, 236, 236);
+
+  &__title {
+    text-align: center;
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 18.3rem);
+    grid-gap: 1rem;
+    padding-top: 2rem;
+  }
+
+  &__tile {
+    display: inline-block;
+    width: 18.3rem;
+    height: 13rem;
+    background-color: rgb(112, 172, 112);
+    text-align: center;
+    line-height: 14rem;
+    border-radius: 0.3rem;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  &__tile:hover {
+    box-shadow: 0 1rem 2rem rgba(black, 0.15);
+    transform: translateY(-2px);
+  }
+}
