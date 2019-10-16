@@ -29,3 +29,25 @@ mat-card {
 .full-width {
   width: 100%;
 }
+
+.error-message-card {
+  background-color: #f44336;
+  color: white;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.226);
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & mat-spinner {
+    z-index: 50;
+  }
+}

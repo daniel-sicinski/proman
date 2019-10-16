@@ -24,9 +24,11 @@ export class AuthService {
   private readonly authErrorMessageSubject = new BehaviorSubject<string | null>(
     null
   );
+  private readonly fetchingAuthData = new BehaviorSubject<boolean>(false);
 
   user$ = this.afAuth.user;
   authErrorMessage$ = this.authErrorMessageSubject.asObservable();
+  fetchingAuthData$ = this.fetchingAuthData.asObservable();
 
   constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) {
     this.usersCollection = this.afs.collection<User>("users");
@@ -34,6 +36,8 @@ export class AuthService {
 
   signUp(authData: AuthData): void {
     const { email, password, name } = authData;
+
+    this.fetchingAuthData.next(true);
     this.afAuth.auth
       .createUserWithEmailAndPassword(email, password)
       .then(userCredential => {
@@ -41,32 +45,38 @@ export class AuthService {
 
         return this.usersCollection.doc(uid).set({ name });
       })
+      .then(() => {
+        this.fetchingAuthData.next(false);
+        // todo > redirect
+      })
       .catch(err => {
+        this.fetchingAuthData.next(false);
         this.authErrorMessageSubject.next(err.message);
       });
   }
 
   logIn(authData: AuthData) {
     const { email, password } = authData;
+
+    this.fetchingAuthData.next(true);
     this.afAuth.auth
       .signInWithEmailAndPassword(email, password)
       .then(res => {
+        this.fetchingAuthData.next(false);
         // todo
         // redirect
       })
       .catch(err => {
+        this.fetchingAuthData.next(false);
         this.authErrorMessageSubject.next(err.message);
       });
   }
 
   logOut() {
-    this.afAuth.auth
-      .signOut()
-      .then(() => {
-        // todo > redirect
-      })
-      .catch(err => {
-        this.authErrorMessageSubject.next(err.message);
-      });
+    this.fetchingAuthData.next(true);
+    this.afAuth.auth.signOut().then(() => {
+      this.fetchingAuthData.next(false);
+      // todo > redirect
+    });
   }
 }
