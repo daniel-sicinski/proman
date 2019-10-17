@@ -1,1 +1,15 @@
-<p>board works!</p>
+<div class="board-container">
+  <mat-toolbar color="primary">
+    <mat-nav-list>
+      <!-- <span>Proman</span> -->
+      <a mat-list-item [routerLink]="['/']">Proman</a>
+      <a mat-list-item [routerLink]="['/dashboard']">Dashboard</a>
+    </mat-nav-list>
+    <mat-nav-list>
+      <a mat-list-item (click)="onLogOut()">Logout</a>
+    </mat-nav-list>
+  </mat-toolbar>
+</div>
+<ul>
+  <li *ngFor="let status of boardStatuses$ | async">{{ status.name }}</li>
+</ul>

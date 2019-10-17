@@ -1,0 +1,19 @@
+:host {
+  & mat-nav-list {
+    display: flex;
+    padding-bottom: 5px;
+  }
+
+  & mat-toolbar {
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 1.5rem 4rem rgba(black, 0.25);
+  }
+}
+
+.dashboard-container {
+  height: 100%;
+  background-color: rgb(245, 245, 245);
+  background-size: cover;
+  position: relative;
+}
