@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { StatusesService, Status } from "../statuses.service";
 
 @Component({
   selector: "app-status",
@@ -6,9 +7,13 @@ import { Component, OnInit, Input } from "@angular/core";
   styleUrls: ["./status.component.scss"]
 })
 export class StatusComponent implements OnInit {
-  @Input() statusName: string;
+  @Input() status: Status;
 
-  constructor() {}
+  constructor(private statusesService: StatusesService) {}
 
   ngOnInit() {}
+
+  onListDelete() {
+    this.statusesService.deleteStatus(this.status);
+  }
 }

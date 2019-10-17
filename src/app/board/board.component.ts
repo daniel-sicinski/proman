@@ -4,6 +4,7 @@ import { Observable } from "rxjs/internal/Observable";
 import { ActivatedRoute, Params } from "@angular/router";
 import { Validators, FormBuilder } from "@angular/forms";
 import { tap } from "rxjs/operators";
+import { AuthService } from "../auth/auth.service";
 
 @Component({
   selector: "app-board",
@@ -24,7 +25,8 @@ export class BoardComponent implements OnInit {
   constructor(
     private statusesService: StatusesService,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -52,5 +54,9 @@ export class BoardComponent implements OnInit {
 
     this.addingStatusState = false;
     this.newStatusForm.value.name = null;
+  }
+
+  onLogOut() {
+    this.authService.logOut();
   }
 }

@@ -1,16 +1,20 @@
-<!-- <mat-card class="status-card">
-  <mat-card-header>
-    <mat-card-title>
-      {{ statusName }}
-    </mat-card-title>
-  </mat-card-header>
-  <mat-card-actions>
-    <button mat-flat-button><mat-icon>add</mat-icon></button>
-  </mat-card-actions>
-</mat-card> -->
-
 <div class="status-card">
-  <div class="status-card__name">{{ statusName }}</div>
+  <div class="status-card__update-container">
+    <div class="status-card__name">{{ status.name }}</div>
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      class="status-card__menu-btn"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" class="status-card__menu">
+      <button mat-menu-item (click)="onListDelete()">
+        <mat-icon>delete</mat-icon>
+        <span>Remove list</span>
+      </button>
+    </mat-menu>
+  </div>
   <div class="status-card__add-btn">
     <mat-icon>add</mat-icon><span>Add a card</span>
   </div>

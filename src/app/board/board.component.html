@@ -12,7 +12,7 @@
   <div class="statuses-container">
     <app-status
       *ngFor="let status of boardStatuses$ | async"
-      [statusName]="status.name"
+      [status]="status"
     ></app-status>
     <span
       class="add-status-panel"

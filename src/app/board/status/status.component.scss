@@ -11,10 +11,21 @@ mat-card {
   background-color: rgb(240, 240, 240);
   border-radius: 0.3rem;
 
+  &__update-container {
+    display: flex;
+  }
+
   &__name {
     padding: 1.2rem;
     color: rgb(71, 71, 71);
     font-size: 1.8rem;
+    flex: 1;
+    cursor: pointer;
+  }
+
+  &__menu {
+    color: rgb(71, 71, 71);
+    background-color: rgb(240, 240, 240);
   }
 
   &__add-btn {
