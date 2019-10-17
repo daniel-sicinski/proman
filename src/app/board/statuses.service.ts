@@ -42,7 +42,11 @@ export class StatusesService {
     this.boardStatusesCollection.add(status);
   }
 
-  updateStatus(statusId: string, status: Status) {}
+  updateStatusName(statusId: string, name: string): void {
+    this.boardStatusesCollection
+      .doc<Status>(statusId)
+      .update({ name });
+  }
 
   deleteStatus(status: Status) {
     console.log("delete start...");
