@@ -19,10 +19,17 @@ import { MatFormFieldModule } from "@angular/material";
 import { MatInputModule } from "@angular/material";
 import { MatButtonModule } from "@angular/material";
 import { MatProgressSpinnerModule } from "@angular/material";
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { MatIconModule } from "@angular/material";
+import { DashboardComponent } from "./dashboard/dashboard.component";
+import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 
 @NgModule({
-  declarations: [AppComponent, LandingPageComponent, AuthComponent, DashboardComponent],
+  declarations: [
+    AppComponent,
+    LandingPageComponent,
+    AuthComponent,
+    DashboardComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -37,9 +44,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     MatFormFieldModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    MatIconModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [AngularFireAuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -1,4 +1,42 @@
 <div class="dashboard-container">
+  <div class="new-board-modal" *ngIf="addBoardModalOpened">
+    <form [formGroup]="newBoardForm" (ngSubmit)="onNewBoardSubmit()">
+      <mat-card>
+        <button
+          mat-icon-button
+          (click)="addBoardModalOpened = false"
+          class="close-button"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+        <mat-card-content>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="Add board title"
+              formControlName="title"
+              type="text"
+            />
+            <mat-error
+              *ngIf="newBoardForm.controls['title'].hasError('required')"
+            >
+              Provide title to add new board
+            </mat-error>
+          </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!newBoardForm.valid"
+          >
+            Submit
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
+  </div>
   <mat-toolbar color="primary">
     <span>Proman</span>
     <mat-nav-list>
@@ -18,7 +56,9 @@
         *ngFor="let board of userBoards$ | async"
         >{{ board.title }}</a
       >
-      <a class="board-container__tile">Add new board</a>
+      <a class="board-container__tile" (click)="addBoardModalOpened = true"
+        >Add new board</a
+      >
     </mat-card-content>
   </mat-card>
 </div>

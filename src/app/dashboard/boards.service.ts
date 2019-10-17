@@ -8,14 +8,14 @@ import { Subscription, Observable } from "rxjs";
 
 export interface Board {
   title: string;
+  userId: string;
 }
 
-@Injectable({
-  providedIn: "root"
-})
+@Injectable({ providedIn: "root" })
 export class BoardsService implements OnDestroy {
   private userBoardsCollection: AngularFirestoreCollection<Board>;
   userBoards$: Observable<Board[]>;
+  currentUserId: string;
 
   userSnapshotSub: Subscription;
 
@@ -25,9 +25,12 @@ export class BoardsService implements OnDestroy {
   ) {
     this.userSnapshotSub = this.authService.user$.subscribe(userSnapshot => {
       if (userSnapshot) {
-        this.userBoardsCollection = this.afs.collection<Board>(
-          `users/${userSnapshot.uid}/boards`
+        this.currentUserId = userSnapshot.uid;
+
+        this.userBoardsCollection = this.afs.collection<Board>(`boards`, ref =>
+          ref.where("userId", "==", userSnapshot.uid)
         );
+
         this.userBoards$ = this.userBoardsCollection.valueChanges();
       }
     });
@@ -38,7 +41,7 @@ export class BoardsService implements OnDestroy {
   }
 
   addBoard(title: string): void {
-    this.userBoardsCollection.add({ title });
+    this.userBoardsCollection.add({ title, userId: this.currentUserId });
   }
 
   updateBoard(boardId: string, newBoard: Board): void {
