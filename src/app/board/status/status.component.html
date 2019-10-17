@@ -20,7 +20,43 @@
       {{ card.description }}
     </div>
   </div>
-  <div class="status-card__add-btn">
+  <div
+    class="status-card__add-btn"
+    *ngIf="!addingCardState"
+    (click)="addingCardState = true"
+  >
     <mat-icon>add</mat-icon><span>Add a card</span>
+  </div>
+  <div class="new-status-modal" *ngIf="addingCardState">
+    <form
+      [formGroup]="newCardForm"
+      (ngSubmit)="onCardAdd()"
+      class="new-status-modal__form"
+    >
+      <input
+        class="new-status-modal__form-input"
+        matInput
+        placeholder="Add description for this card..."
+        formControlName="description"
+        type="text"
+      />
+      <div class="new-status-modal__button-container">
+        <button
+          class="new-status-modal__submit-btn"
+          mat-raised-button
+          color="accent"
+          type="submit"
+        >
+          Add card
+        </button>
+        <button
+          mat-icon-button
+          (click)="addingCardState = false"
+          class="new-status-modal__close-btn"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </form>
   </div>
 </div>

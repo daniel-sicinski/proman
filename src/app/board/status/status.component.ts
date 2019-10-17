@@ -16,11 +16,11 @@ export class StatusComponent implements OnInit {
   @Input() boardId: string;
 
   statusCards$: Observable<Card[]>;
-  addingStatusState: false;
+  addingCardState: false;
   numberOfCards: number;
 
   newCardForm = this.fb.group({
-    name: [null, Validators.required]
+    description: [null, Validators.required]
   });
 
   constructor(
@@ -42,5 +42,15 @@ export class StatusComponent implements OnInit {
 
   onListDelete() {
     this.statusesService.deleteStatus(this.status);
+  }
+
+  onCardAdd() {
+    if (!this.newCardForm.valid) return;
+
+    const { description } = this.newCardForm.value;
+    this.cardsService.addCard({ description, order: this.numberOfCards + 1 });
+
+    this.addingCardState = false;
+    this.newCardForm.reset();
   }
 }

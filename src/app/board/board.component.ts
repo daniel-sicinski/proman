@@ -53,7 +53,7 @@ export class BoardComponent implements OnInit {
     });
 
     this.addingStatusState = false;
-    this.newStatusForm.value.name = null;
+    this.newStatusForm.reset();
   }
 
   onLogOut() {
