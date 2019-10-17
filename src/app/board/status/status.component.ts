@@ -1,19 +1,30 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 import { StatusesService, Status } from "../statuses.service";
 import { CardsService, Card } from "./cards.service";
 import { Observable } from "rxjs";
 import { Validators, FormBuilder } from "@angular/forms";
 import { tap } from "rxjs/operators";
+import { FormControl } from "@angular/forms";
 
 @Component({
   selector: "app-status",
   templateUrl: "./status.component.html",
   styleUrls: ["./status.component.scss"],
-  providers: [CardsService]
+  providers: [CardsService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StatusComponent implements OnInit {
-  @Input() status: Status;
+export class StatusComponent {
+  private _status: Status;
   @Input() boardId: string;
+
+  @Input() set status(newValue: Status) {
+    this._status = newValue;
+    this.name = newValue.name;
+  }
+
+  name = "";
+  isNameEditVisible = false;
+  readonly editNameControl = new FormControl("");
 
   statusCards$: Observable<Card[]>;
   addingCardState: false;
@@ -39,9 +50,32 @@ export class StatusComponent implements OnInit {
       })
     );
   }
+  onListDelete(): void {
+    this.statusesService.deleteStatus(this._status);
+  }
 
-  onListDelete() {
-    this.statusesService.deleteStatus(this.status);
+  showEditName(): void {
+    this.editNameControl.setValue(this._status.name);
+    this.isNameEditVisible = true;
+  }
+
+  focus(element: HTMLElement): void {
+    setTimeout(() => element.focus(), 50);
+  }
+
+  updateName(): void {
+    this.isNameEditVisible = false;
+    const newName = this.editNameControl.value;
+
+    if (!newName || newName === this._status.name) {
+      return;
+    }
+
+    this.name = newName;
+    this.statusesService.updateStatusName(
+      this._status.statusId!,
+      this.editNameControl.value
+    );
   }
 
   onCardAdd() {

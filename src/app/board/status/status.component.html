@@ -1,6 +1,16 @@
 <div class="status-card">
   <div class="status-card__update-container">
-    <div class="status-card__name">{{ status.name }}</div>
+    <div (click)="showEditName(); focus(editName)" class="status-card__name">{{ name }}</div>
+    <input
+      #editName
+      (blur)="isNameEditVisible = false"
+      (keyup.escape)="isNameEditVisible = false"
+      (keyup.enter)="updateName()"
+      [formControl]="editNameControl"
+      class="status-card__edit-name"
+      [class.status-card__edit-name--hide]="!isNameEditVisible"
+      type="text"
+    >
     <button
       mat-icon-button
       [matMenuTriggerFor]="menu"
