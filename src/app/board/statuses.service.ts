@@ -26,7 +26,9 @@ export class StatusesService {
     });
   }
 
-  addStatus(name: string) {}
+  addStatus(name: string) {
+    this.boardStatusesCollection.add({ name });
+  }
 
   updateStatus(statusId: string, status: Status) {}
 

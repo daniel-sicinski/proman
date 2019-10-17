@@ -3,3 +3,40 @@ mat-card {
   width: 27rem;
   margin-right: 1rem;
 }
+
+.status-card {
+  display: inline-block;
+  width: 27rem;
+  margin-right: 1rem;
+  background-color: rgb(240, 240, 240);
+  border-radius: 0.3rem;
+
+  &__name {
+    padding: 1.2rem;
+    color: rgb(71, 71, 71);
+    font-size: 1.8rem;
+  }
+
+  &__add-btn {
+    padding: 0.8rem;
+    transition: all 0.2s;
+    color: rgb(112, 112, 112);
+    font-size: 1.6rem;
+    display: flex;
+    justify-content: left;
+    cursor: pointer;
+
+    & mat-icon {
+      margin-right: 0.4rem;
+      margin-bottom: 0.2rem;
+    }
+
+    & span {
+      padding-top: 0.3rem;
+    }
+
+    &:hover {
+      background-color: rgb(211, 211, 211);
+    }
+  }
+}

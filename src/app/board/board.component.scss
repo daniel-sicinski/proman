@@ -11,9 +11,83 @@
   }
 }
 
-.dashboard-container {
+.board-container {
   height: 100%;
-  background-color: rgb(245, 245, 245);
+  background-image: linear-gradient(rgba(black, 0.5), rgba(black, 0.5)),
+    url("../../assets//images/mb-bg-fb-07.png");
   background-size: cover;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.statuses-container {
+  flex: 1;
+  padding: 2rem 2rem;
+  display: flex;
+  align-items: top;
+}
+
+.add-status-panel {
+  max-height: 4.5rem;
+  width: 27rem;
+  margin-right: 1rem;
+  background-color: rgba(0, 0, 0, 0.342);
+  border-radius: 0.3rem;
+  padding: 0.8rem;
+  transition: all 0.2s;
+  color: rgb(112, 112, 112);
+  font-size: 1.6rem;
+  display: flex;
+  justify-content: left;
+  cursor: pointer;
+
+  & span {
+    padding-top: 0.3rem;
+  }
+}
+
+.new-status-modal {
+  &__form {
+    width: 27rem;
+    margin-right: 1rem;
+    background-color: rgb(240, 240, 240);
+    border-radius: 0.3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding: 0.5rem;
+  }
+
+  &__form-input {
+    width: 100%;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid blue;
+    margin-bottom: 0.8rem;
+    background-color: white;
+    border-radius: 0.3rem;
+
+    &::-webkit-input-placeholder {
+      font-weight: 100;
+      font-size: 1.2rem;
+      font-family: inherit;
+      color: grey;
+    }
+
+    &__button-container {
+      display: flex;
+    }
+
+    &__submit-btn {
+      margin-right: 0.2rem;
+      cursor: pointer;
+      color: #dfdfdf;
+    }
+
+    &__close-btn {
+      cursor: pointer;
+      color: rgb(240, 240, 240);
+    }
+  }
 }

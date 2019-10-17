@@ -1,4 +1,4 @@
-<mat-card>
+<!-- <mat-card class="status-card">
   <mat-card-header>
     <mat-card-title>
       {{ statusName }}
@@ -7,4 +7,11 @@
   <mat-card-actions>
     <button mat-flat-button><mat-icon>add</mat-icon></button>
   </mat-card-actions>
-</mat-card>
+</mat-card> -->
+
+<div class="status-card">
+  <div class="status-card__name">{{ statusName }}</div>
+  <div class="status-card__add-btn">
+    <mat-icon>add</mat-icon><span>Add a card</span>
+  </div>
+</div>
