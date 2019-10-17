@@ -1,10 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { StatusesService, Status } from "./statuses.service";
 import { Observable } from "rxjs/internal/Observable";
 import { ActivatedRoute, Params } from "@angular/router";
 import { Validators, FormBuilder } from "@angular/forms";
-import { tap } from "rxjs/operators";
 import { AuthService } from "../auth/auth.service";
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: "app-board",
@@ -12,11 +13,13 @@ import { AuthService } from "../auth/auth.service";
   styleUrls: ["./board.component.scss"],
   providers: [StatusesService]
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
+  boardStatuses: Status[] = [];
   boardStatuses$: Observable<Status[]>;
   boardId: string;
   addingStatusState: false;
-  numberOfBoardStatuses: number;
+
+  updateBoardStatusesSub: Subscription;
 
   newStatusForm = this.fb.group({
     name: [null, Validators.required]
@@ -29,18 +32,20 @@ export class BoardComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
       this.boardId = params["boardId"];
-
       this.statusesService.getStatusesOfBoard(this.boardId);
 
-      this.boardStatuses$ = this.statusesService.boardStatuses$.pipe(
-        tap(statuses => {
-          this.numberOfBoardStatuses = statuses.length;
-        })
-      );
+      this.updateBoardStatusesSub = this.statusesService.boardStatuses$
+        .subscribe(statuses => {
+          this.boardStatuses = statuses;
+        });
     });
+  }
+
+  ngOnDestroy(): void {
+    this.updateBoardStatusesSub.unsubscribe();
   }
 
   onStatusAdd() {
@@ -49,7 +54,7 @@ export class BoardComponent implements OnInit {
     const { name } = this.newStatusForm.value;
     this.statusesService.addStatus({
       name,
-      order: this.numberOfBoardStatuses + 1
+      order: this.boardStatuses.length + 1
     });
 
     this.addingStatusState = false;
@@ -62,5 +67,22 @@ export class BoardComponent implements OnInit {
 
   onLogOut() {
     this.authService.logOut();
+  }
+
+  drop({ previousIndex, currentIndex }: CdkDragDrop<string[]>): void {
+    if (previousIndex < currentIndex) {
+      const p1 = this.boardStatuses.slice(0, previousIndex);
+      const p2 = this.boardStatuses.slice(previousIndex + 1, currentIndex + 1);
+      const p3 = this.boardStatuses.slice(currentIndex + 1, this.boardStatuses.length);
+      this.boardStatuses = [...p1, ...p2, this.boardStatuses[previousIndex], ...p3]
+        .map((status, index) => ({ ...status, order: index + 1 }));
+    } else {
+      const p1 = this.boardStatuses.slice(0, currentIndex);
+      const p2 = this.boardStatuses.slice(currentIndex, previousIndex);
+      const p3 = this.boardStatuses.slice(previousIndex + 1, this.boardStatuses.length);
+      this.boardStatuses = [...p1, this.boardStatuses[previousIndex], ...p2, ...p3]
+        .map((status, index) => ({ ...status, order: index + 1 }));
+    }
+    console.log('### new order', this.boardStatuses);
   }
 }

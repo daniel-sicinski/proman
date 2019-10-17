@@ -21,6 +21,7 @@ import { MatButtonModule } from "@angular/material";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { MatIconModule } from "@angular/material";
 import { MatMenuModule } from "@angular/material";
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 import { BoardComponent } from "./board/board.component";
@@ -51,6 +52,7 @@ import { StatusComponent } from "./board/status/status.component";
     MatProgressSpinnerModule,
     MatIconModule,
     MatMenuModule,
+    DragDropModule,
     AppRoutingModule
   ],
   providers: [AngularFireAuthGuard],
