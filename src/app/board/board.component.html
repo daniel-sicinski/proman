@@ -13,6 +13,7 @@
     <app-status
       *ngFor="let status of boardStatuses$ | async"
       [status]="status"
+      [boardId]="boardId"
     ></app-status>
     <span
       class="add-status-panel"

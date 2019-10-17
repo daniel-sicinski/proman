@@ -14,6 +14,9 @@
         <span>Remove list</span>
       </button>
     </mat-menu>
+    <span *ngFor="let card of statusCards$ | async">{{
+      card.description
+    }}</span>
   </div>
   <div class="status-card__add-btn">
     <mat-icon>add</mat-icon><span>Add a card</span>
