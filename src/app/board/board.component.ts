@@ -4,8 +4,8 @@ import { Observable } from "rxjs/internal/Observable";
 import { ActivatedRoute, Params } from "@angular/router";
 import { Validators, FormBuilder } from "@angular/forms";
 import { AuthService } from "../auth/auth.service";
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Subscription } from 'rxjs';
+import { CdkDragDrop } from "@angular/cdk/drag-drop";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-board",
@@ -37,10 +37,11 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.boardId = params["boardId"];
       this.statusesService.getStatusesOfBoard(this.boardId);
 
-      this.updateBoardStatusesSub = this.statusesService.boardStatuses$
-        .subscribe(statuses => {
+      this.updateBoardStatusesSub = this.statusesService.boardStatuses$.subscribe(
+        statuses => {
           this.boardStatuses = statuses;
-        });
+        }
+      );
     });
   }
 
@@ -73,16 +74,32 @@ export class BoardComponent implements OnInit, OnDestroy {
     if (previousIndex < currentIndex) {
       const p1 = this.boardStatuses.slice(0, previousIndex);
       const p2 = this.boardStatuses.slice(previousIndex + 1, currentIndex + 1);
-      const p3 = this.boardStatuses.slice(currentIndex + 1, this.boardStatuses.length);
-      this.boardStatuses = [...p1, ...p2, this.boardStatuses[previousIndex], ...p3]
-        .map((status, index) => ({ ...status, order: index + 1 }));
+      const p3 = this.boardStatuses.slice(
+        currentIndex + 1,
+        this.boardStatuses.length
+      );
+      this.boardStatuses = [
+        ...p1,
+        ...p2,
+        this.boardStatuses[previousIndex],
+        ...p3
+      ].map((status, index) => ({ ...status, order: index + 1 }));
     } else {
       const p1 = this.boardStatuses.slice(0, currentIndex);
       const p2 = this.boardStatuses.slice(currentIndex, previousIndex);
-      const p3 = this.boardStatuses.slice(previousIndex + 1, this.boardStatuses.length);
-      this.boardStatuses = [...p1, this.boardStatuses[previousIndex], ...p2, ...p3]
-        .map((status, index) => ({ ...status, order: index + 1 }));
+      const p3 = this.boardStatuses.slice(
+        previousIndex + 1,
+        this.boardStatuses.length
+      );
+      this.boardStatuses = [
+        ...p1,
+        this.boardStatuses[previousIndex],
+        ...p2,
+        ...p3
+      ].map((status, index) => ({ ...status, order: index + 1 }));
     }
-    console.log('### new order', this.boardStatuses);
+
+    this.statusesService.updateStatusesOrder(this.boardStatuses);
+    console.log("### new order", this.boardStatuses);
   }
 }

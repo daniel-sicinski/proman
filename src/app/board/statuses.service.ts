@@ -2,7 +2,8 @@ import { Injectable } from "@angular/core";
 import * as firebase from "firebase/app";
 import {
   AngularFirestore,
-  AngularFirestoreCollection
+  AngularFirestoreCollection,
+  DocumentReference
 } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { map, take, tap } from "rxjs/operators";
@@ -43,9 +44,20 @@ export class StatusesService {
   }
 
   updateStatusName(statusId: string, name: string): void {
-    this.boardStatusesCollection
-      .doc<Status>(statusId)
-      .update({ name });
+    this.boardStatusesCollection.doc<Status>(statusId).update({ name });
+  }
+
+  updateStatusesOrder(statuses: Status[]) {
+    const batch = this.afs.firestore.batch();
+
+    statuses.forEach(status => {
+      const docRef: DocumentReference = this.boardStatusesCollection.doc(
+        status.statusId
+      ).ref;
+      batch.update(docRef, { order: status.order });
+    });
+
+    batch.commit();
   }
 
   deleteStatus(status: Status) {
