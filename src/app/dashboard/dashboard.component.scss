@@ -48,6 +48,25 @@
     border-radius: 0.3rem;
     transition: all 0.2s;
     cursor: pointer;
+    text-decoration: none;
+    color: white;
+    text-transform: capitalize;
+    font-size: 2rem;
+
+    &:last-of-type {
+      // display: flex;
+      // flex-direction: column;
+      // align-items: center;
+      // justify-content: center;
+      font-size: 1.5rem;
+      position: relative;
+
+      & mat-icon {
+        position: absolute;
+        top: 3.5rem;
+        left: 7.6rem;
+      }
+    }
   }
 
   &__tile:hover {
