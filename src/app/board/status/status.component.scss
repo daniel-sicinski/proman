@@ -1,3 +1,5 @@
+@import "src/styles/variables";
+
 mat-card {
   display: inline-block;
   width: 27rem;
@@ -13,6 +15,7 @@ mat-card {
 
   &__update-container {
     display: flex;
+    position: relative;
   }
 
   &__name {
@@ -21,6 +24,24 @@ mat-card {
     font-size: 1.8rem;
     flex: 1;
     cursor: pointer;
+  }
+
+  &__edit-name {
+    background-color: white;
+    border-radius: 0.3rem;
+    border: 1px solid blue;
+    font-family: $main-font;
+    font-size: 18px;
+    left: 0;
+    margin: 0.6rem;
+    padding: 0.5rem;
+    position: absolute;
+    top: 0;
+    width: 23rem;
+
+    &--hide {
+      visibility: hidden;
+    }
   }
 
   &__menu {
