@@ -23,6 +23,7 @@ import { MatIconModule } from "@angular/material";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 import { BoardComponent } from './board/board.component';
+import { StatusComponent } from './board/status/status.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { BoardComponent } from './board/board.component';
     LandingPageComponent,
     AuthComponent,
     DashboardComponent,
-    BoardComponent
+    BoardComponent,
+    StatusComponent
   ],
   imports: [
     BrowserModule,

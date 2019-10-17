@@ -10,6 +10,7 @@
     </mat-nav-list>
   </mat-toolbar>
 </div>
-<ul>
-  <li *ngFor="let status of boardStatuses$ | async">{{ status.name }}</li>
-</ul>
+<app-status
+  *ngFor="let status of boardStatuses$ | async"
+  [statusName]="status.name"
+></app-status>
