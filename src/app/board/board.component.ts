@@ -3,6 +3,7 @@ import { StatusesService, Status } from "./statuses.service";
 import { Observable } from "rxjs/internal/Observable";
 import { ActivatedRoute, Params } from "@angular/router";
 import { Validators, FormBuilder } from "@angular/forms";
+import { tap } from "rxjs/operators";
 
 @Component({
   selector: "app-board",
@@ -14,6 +15,7 @@ export class BoardComponent implements OnInit {
   boardStatuses$: Observable<Status[]>;
   boardId: string;
   addingStatusState: false;
+  numberOfBoardStatuses: number;
 
   newStatusForm = this.fb.group({
     name: [null, Validators.required]
@@ -31,7 +33,11 @@ export class BoardComponent implements OnInit {
 
       this.statusesService.getStatusesOfBoard(this.boardId);
 
-      this.boardStatuses$ = this.statusesService.boardStatuses$;
+      this.boardStatuses$ = this.statusesService.boardStatuses$.pipe(
+        tap(statuses => {
+          this.numberOfBoardStatuses = statuses.length;
+        })
+      );
     });
   }
 
@@ -39,7 +45,10 @@ export class BoardComponent implements OnInit {
     if (!this.newStatusForm.valid) return;
 
     const { name } = this.newStatusForm.value;
-    this.statusesService.addStatus(name);
+    this.statusesService.addStatus({
+      name,
+      order: this.numberOfBoardStatuses + 1
+    });
 
     this.addingStatusState = false;
     this.newStatusForm.value.name = null;

@@ -4,9 +4,11 @@ import {
   AngularFirestoreCollection
 } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 export interface Status {
   name: string;
+  order: number;
   statusId?: string;
 }
 
@@ -19,15 +21,22 @@ export class StatusesService {
 
   getStatusesOfBoard(boardId: string) {
     this.boardStatusesCollection = this.afs.collection<Status>(
-      `boards/${boardId}/statuses`
+      `boards/${boardId}/statuses`,
+      ref => ref.orderBy("order", "asc")
     );
-    this.boardStatuses$ = this.boardStatusesCollection.valueChanges({
-      idField: "statusId"
-    });
+    this.boardStatuses$ = this.boardStatusesCollection
+      .valueChanges({
+        idField: "statusId"
+      })
+      .pipe(
+        map(statuses => {
+          return statuses.sort((st1, st2) => st1.order - st2.order);
+        })
+      );
   }
 
-  addStatus(name: string) {
-    this.boardStatusesCollection.add({ name });
+  addStatus(status: Status) {
+    this.boardStatusesCollection.add(status);
   }
 
   updateStatus(statusId: string, status: Status) {}
