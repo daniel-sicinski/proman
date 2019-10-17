@@ -54,6 +54,7 @@
       <a
         class="board-container__tile"
         *ngFor="let board of userBoards$ | async"
+        [routerLink]="['/boards', board.boardId]"
         >{{ board.title }}</a
       >
       <a class="board-container__tile" (click)="addBoardModalOpened = true"

@@ -9,6 +9,7 @@ import { Subscription, Observable } from "rxjs";
 export interface Board {
   title: string;
   userId: string;
+  boardId?: string;
 }
 
 @Injectable({ providedIn: "root" })
@@ -31,7 +32,9 @@ export class BoardsService implements OnDestroy {
           ref.where("userId", "==", userSnapshot.uid)
         );
 
-        this.userBoards$ = this.userBoardsCollection.valueChanges();
+        this.userBoards$ = this.userBoardsCollection.valueChanges({
+          idField: "boardId"
+        });
       }
     });
   }
