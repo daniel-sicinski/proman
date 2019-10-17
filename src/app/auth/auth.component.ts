@@ -49,6 +49,9 @@ export class AuthComponent implements OnInit, OnDestroy {
       if (params["authType"] === "logIn") {
         this.authForm = this.loginForm;
         this.loginState = true;
+      } else {
+        this.authForm = this.signUpForm;
+        this.loginState = false;
       }
     });
   }

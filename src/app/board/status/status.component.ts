@@ -1,27 +1,55 @@
 import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 import { StatusesService, Status } from "../statuses.service";
-import { FormControl } from '@angular/forms';
+import { CardsService, Card } from "./cards.service";
+import { Observable } from "rxjs";
+import { Validators, FormBuilder } from "@angular/forms";
+import { tap } from "rxjs/operators";
+import { FormControl } from "@angular/forms";
 
 @Component({
   selector: "app-status",
   templateUrl: "./status.component.html",
   styleUrls: ["./status.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [CardsService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatusComponent {
   private _status: Status;
-  
+  @Input() boardId: string;
+
   @Input() set status(newValue: Status) {
     this._status = newValue;
     this.name = newValue.name;
   }
 
-  name = '';
+  name = "";
   isNameEditVisible = false;
-  readonly editNameControl = new FormControl('');
+  readonly editNameControl = new FormControl("");
 
-  constructor(private statusesService: StatusesService) {}
+  statusCards$: Observable<Card[]>;
+  addingCardState: false;
+  numberOfCards: number;
 
+  newCardForm = this.fb.group({
+    description: [null, Validators.required]
+  });
+
+  constructor(
+    private statusesService: StatusesService,
+    private fb: FormBuilder,
+    private cardsService: CardsService
+  ) {}
+
+  ngOnInit() {
+    this.cardsService.getCardsForStatus(this.boardId, this._status.statusId);
+
+    this.statusCards$ = this.cardsService.statusCards$.pipe(
+      tap(cards => {
+        console.log(cards);
+        this.numberOfCards = cards.length;
+      })
+    );
+  }
   onListDelete(): void {
     this.statusesService.deleteStatus(this._status);
   }
@@ -44,6 +72,23 @@ export class StatusComponent {
     }
 
     this.name = newName;
-    this.statusesService.updateStatusName(this._status.statusId!, this.editNameControl.value)
+    this.statusesService.updateStatusName(
+      this._status.statusId!,
+      this.editNameControl.value
+    );
+  }
+
+  onCardAdd() {
+    if (!this.newCardForm.valid) return;
+
+    const { description } = this.newCardForm.value;
+    this.cardsService.addCard({ description, order: this.numberOfCards + 1 });
+
+    this.addingCardState = false;
+    this.newCardForm.reset();
+  }
+
+  trackByCards(index: number, card: Card): string | undefined {
+    return card.cardId;
   }
 }

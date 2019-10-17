@@ -58,7 +58,11 @@ export class BoardComponent implements OnInit, OnDestroy {
     });
 
     this.addingStatusState = false;
-    this.newStatusForm.value.name = null;
+    this.newStatusForm.reset();
+  }
+
+  trackByStatuses(index: number, status: Status): string | undefined {
+    return status.statusId;
   }
 
   onLogOut() {

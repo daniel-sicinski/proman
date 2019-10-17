@@ -15,4 +15,24 @@
   height: 100%;
   background-image: url("../../assets/images/mb-bg-fb-09.png");
   background-size: cover;
+  position: relative;
+
+  & .hero-box {
+    color: white;
+    position: absolute;
+    top: 25rem;
+    right: 15rem;
+  }
+}
+
+.logo-wrapper {
+  width: 10rem;
+  height: 3rem;
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
 }

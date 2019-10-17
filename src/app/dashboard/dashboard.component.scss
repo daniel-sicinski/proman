@@ -23,7 +23,7 @@
   max-width: 80rem;
   margin-top: 3rem;
   min-height: 50rem;
-  box-shadow: 0 2.5rem 4rem rgba(black, 0.25);
+  box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.52);
   background-color: rgb(15, 116, 2);
   color: rgb(236, 236, 236);
 
@@ -102,5 +102,17 @@
       width: 100%;
       padding-top: 3rem;
     }
+  }
+}
+
+.logo-wrapper {
+  width: 10rem;
+  height: 3rem;
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 }
