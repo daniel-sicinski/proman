@@ -41,7 +41,7 @@ export class StatusComponent {
   ) {}
 
   ngOnInit() {
-    this.cardsService.getCardsForStatus(this.boardId, this.status.statusId);
+    this.cardsService.getCardsForStatus(this.boardId, this._status.statusId);
 
     this.statusCards$ = this.cardsService.statusCards$.pipe(
       tap(cards => {
@@ -86,5 +86,9 @@ export class StatusComponent {
 
     this.addingCardState = false;
     this.newCardForm.reset();
+  }
+
+  trackByCards(index: number, card: Card): string | undefined {
+    return card.cardId;
   }
 }

@@ -11,7 +11,7 @@
   </mat-toolbar>
   <div class="statuses-container">
     <app-status
-      *ngFor="let status of boardStatuses$ | async"
+      *ngFor="let status of boardStatuses$ | async; trackBy: trackByStatuses"
       [status]="status"
       [boardId]="boardId"
     ></app-status>
@@ -39,6 +39,7 @@
           placeholder="Add name of new list"
           formControlName="name"
           type="text"
+          autofocus
         />
         <div class="new-status-modal__button-container">
           <button

@@ -56,6 +56,10 @@ export class BoardComponent implements OnInit {
     this.newStatusForm.reset();
   }
 
+  trackByStatuses(index: number, status: Status): string | undefined {
+    return status.statusId;
+  }
+
   onLogOut() {
     this.authService.logOut();
   }
