@@ -9,11 +9,8 @@
       <a mat-list-item (click)="onLogOut()">Logout</a>
     </mat-nav-list>
   </mat-toolbar>
-  <div class="statuses-container">
-    <app-status
-      *ngFor="let status of boardStatuses$ | async"
-      [status]="status"
-    ></app-status>
+  <div cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" class="statuses-container">
+    <app-status *ngFor="let status of boardStatuses" cdkDrag [status]="status"></app-status>
     <span
       class="add-status-panel"
       [ngClass]="{
