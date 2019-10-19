@@ -33,6 +33,7 @@
       *ngFor="let card of statusCards$ | async; trackBy: trackByCards"
     >
       {{ card.description }}
+      <button class="card-tile__edit-btn"><mat-icon>edit</mat-icon></button>
     </div>
   </div>
   <div
