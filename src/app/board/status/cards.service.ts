@@ -7,6 +7,7 @@ import {
 import { Observable } from "rxjs";
 import { map, take, tap } from "rxjs/operators";
 import * as firebase from "firebase";
+// import undefined = require("firebase/empty-import");
 
 export interface Card {
   description: string;
@@ -53,15 +54,49 @@ export class CardsService {
     this.statusCardsCollection.doc(card.cardId).set(card);
   }
 
-  updateCardsOrderWithinStatus(cards: Card[]) {
+  updateCardsOrderWithinStatus(cardsInNewOrder: Card[]) {
     const batch = this.afs.firestore.batch();
 
-    cards.forEach(card => {
-      const docRef: DocumentReference = this.statusCardsCollection.doc(
-        card.cardId
-      ).ref;
-      batch.update(docRef, { order: card.order });
+    this.updateOrderOfCardsInFirestore(
+      this.statusCardsCollection,
+      cardsInNewOrder,
+      batch
+    );
+
+    batch.commit();
+  }
+
+  changeCardStatus(
+    previousStatusId: string,
+    card: Card,
+    previousStatusCollection: Card[],
+    newStatusCollection: Card[]
+  ) {
+    let batch = this.afs.firestore.batch();
+
+    // Update previous status
+    const previousCardsCollectionRef = this.afs.collection<Card>(
+      `boards/${this.boardId}/statuses/${previousStatusId}/cards`
+    );
+
+    batch.delete(previousCardsCollectionRef.doc(card.cardId).ref);
+
+    this.updateOrderOfCardsInFirestore(
+      previousCardsCollectionRef,
+      previousStatusCollection,
+      batch
+    );
+
+    // Update new status
+    batch.set(this.statusCardsCollection.doc(card.cardId).ref, {
+      ...card
     });
+
+    this.updateOrderOfCardsInFirestore(
+      this.statusCardsCollection,
+      newStatusCollection,
+      batch
+    );
 
     batch.commit();
   }
@@ -92,5 +127,16 @@ export class CardsService {
       .subscribe(() => {
         batch.commit().then(() => console.log("batch completed!"));
       });
+  }
+
+  updateOrderOfCardsInFirestore(
+    cardsCollectionRef: AngularFirestoreCollection<Card>,
+    collectionWithNewOrder: Card[],
+    batch: firebase.firestore.WriteBatch
+  ) {
+    collectionWithNewOrder.forEach((card, index) => {
+      const docRef: DocumentReference = cardsCollectionRef.doc(card.cardId).ref;
+      batch.update(docRef, { order: index + 1 });
+    });
   }
 }

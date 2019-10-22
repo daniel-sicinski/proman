@@ -1,19 +1,21 @@
 import {
   Component,
   Input,
-  ChangeDetectionStrategy,
   OnInit,
   Output,
   EventEmitter,
-  ChangeDetectorRef
+  ElementRef
 } from "@angular/core";
 import { StatusesService, Status } from "../statuses.service";
 import { CardsService, Card } from "./cards.service";
 import { Observable } from "rxjs";
 import { Validators, FormBuilder } from "@angular/forms";
-import { tap } from "rxjs/operators";
 import { FormControl } from "@angular/forms";
-import { CdkDragDrop } from "@angular/cdk/drag-drop";
+import {
+  CdkDragDrop,
+  moveItemInArray,
+  transferArrayItem
+} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: "app-status",
@@ -24,12 +26,17 @@ import { CdkDragDrop } from "@angular/cdk/drag-drop";
 export class StatusComponent implements OnInit {
   private _status: Status;
   @Input() boardId: string;
+  @Input() connectedTo: (string | undefined)[];
   @Output() editStateChange = new EventEmitter<boolean>();
   cards: Card[] = [];
 
   @Input() set status(newValue: Status) {
     this._status = newValue;
     this.name = newValue.name;
+  }
+
+  get status() {
+    return this._status;
   }
 
   name = "";
@@ -50,6 +57,8 @@ export class StatusComponent implements OnInit {
     private fb: FormBuilder,
     private cardsService: CardsService
   ) {}
+
+  cardContainer: ElementRef;
 
   ngOnInit() {
     this.cardsService
@@ -102,16 +111,32 @@ export class StatusComponent implements OnInit {
     return card.cardId;
   }
 
-  onCardDrop({ previousIndex, currentIndex }: CdkDragDrop<Card[]>): void {
-    const cardToMove = this.cards[previousIndex];
-    const cardToBeReplaced = this.cards[currentIndex];
+  onCardDrop(event: CdkDragDrop<Card[]>): void {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
 
-    cardToMove.order = currentIndex + 1;
-    cardToBeReplaced.order = previousIndex + 1;
+      this.cardsService.updateCardsOrderWithinStatus(event.container.data);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
 
-    this.cards.splice(previousIndex, 1, cardToBeReplaced);
-    this.cards.splice(currentIndex, 1, cardToMove);
+      const previousStatusId = event.previousContainer.element.nativeElement.id;
+      const cardToMove = event.container.data[event.currentIndex];
 
-    this.cardsService.updateCardsOrderWithinStatus(this.cards);
+      this.cardsService.changeCardStatus(
+        previousStatusId,
+        cardToMove,
+        event.previousContainer.data,
+        event.container.data
+      );
+    }
   }
 }

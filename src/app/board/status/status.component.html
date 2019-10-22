@@ -29,8 +29,11 @@
     </mat-menu>
   </div>
   <div
+    id="{{ status.statusId }}"
     class="status-card__cards-contaner"
     cdkDropList
+    [cdkDropListData]="cards"
+    [cdkDropListConnectedTo]="connectedTo"
     cdkDropListOrientation="vertical"
     (cdkDropListDropped)="onCardDrop($event)"
   >

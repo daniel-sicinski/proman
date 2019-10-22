@@ -20,6 +20,8 @@ export class BoardComponent implements OnInit, OnDestroy {
   addingStatusState: false;
   cardEditState: boolean;
 
+  connectedTo: (string | undefined)[] = [];
+
   updateBoardStatusesSub: Subscription;
   cardEditStateSub: Subscription;
 
@@ -42,6 +44,7 @@ export class BoardComponent implements OnInit, OnDestroy {
       this.updateBoardStatusesSub = this.statusesService.boardStatuses$.subscribe(
         statuses => {
           this.boardStatuses = statuses;
+          this.connectedTo = statuses.map(status => status.statusId);
         }
       );
     });
