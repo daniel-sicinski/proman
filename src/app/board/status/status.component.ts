@@ -4,7 +4,8 @@ import {
   ChangeDetectionStrategy,
   OnInit,
   Output,
-  EventEmitter
+  EventEmitter,
+  ChangeDetectorRef
 } from "@angular/core";
 import { StatusesService, Status } from "../statuses.service";
 import { CardsService, Card } from "./cards.service";
@@ -12,18 +13,19 @@ import { Observable } from "rxjs";
 import { Validators, FormBuilder } from "@angular/forms";
 import { tap } from "rxjs/operators";
 import { FormControl } from "@angular/forms";
+import { CdkDragDrop } from "@angular/cdk/drag-drop";
 
 @Component({
   selector: "app-status",
   templateUrl: "./status.component.html",
   styleUrls: ["./status.component.scss"],
-  providers: [CardsService],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  providers: [CardsService]
 })
 export class StatusComponent implements OnInit {
   private _status: Status;
   @Input() boardId: string;
   @Output() editStateChange = new EventEmitter<boolean>();
+  cards: Card[] = [];
 
   @Input() set status(newValue: Status) {
     this._status = newValue;
@@ -50,14 +52,12 @@ export class StatusComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.cardsService.getCardsForStatus(this.boardId, this._status.statusId);
-
-    this.statusCards$ = this.cardsService.statusCards$.pipe(
-      tap(cards => {
-        console.log(cards);
+    this.cardsService
+      .getCardsForStatus(this.boardId, this._status.statusId)
+      .subscribe(cards => {
+        this.cards = [...cards];
         this.numberOfCards = cards.length;
-      })
-    );
+      });
   }
 
   onListDelete(): void {
@@ -100,5 +100,18 @@ export class StatusComponent implements OnInit {
 
   trackByCards(index: number, card: Card): string | undefined {
     return card.cardId;
+  }
+
+  onCardDrop({ previousIndex, currentIndex }: CdkDragDrop<Card[]>): void {
+    const cardToMove = this.cards[previousIndex];
+    const cardToBeReplaced = this.cards[currentIndex];
+
+    cardToMove.order = currentIndex + 1;
+    cardToBeReplaced.order = previousIndex + 1;
+
+    this.cards.splice(previousIndex, 1, cardToBeReplaced);
+    this.cards.splice(currentIndex, 1, cardToMove);
+
+    this.cardsService.updateCardsOrderWithinStatus(this.cards);
   }
 }

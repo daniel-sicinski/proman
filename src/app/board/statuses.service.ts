@@ -61,9 +61,6 @@ export class StatusesService {
   }
 
   deleteStatus(status: Status) {
-    console.log("delete start...");
-    // this.boardStatusesCollection.doc(status.statusId).delete();
-
     const batch = this.afs.firestore.batch();
     batch.delete(this.boardStatusesCollection.doc(status.statusId).ref);
 
@@ -84,7 +81,7 @@ export class StatusesService {
         })
       )
       .subscribe(() => {
-        batch.commit().then(() => console.log("batch completed!"));
+        batch.commit();
       });
   }
 }

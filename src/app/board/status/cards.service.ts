@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import {
   AngularFirestore,
-  AngularFirestoreCollection
+  AngularFirestoreCollection,
+  DocumentReference
 } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
 import { map, take, tap } from "rxjs/operators";
@@ -22,7 +23,10 @@ export class CardsService {
 
   constructor(private readonly afs: AngularFirestore) {}
 
-  getCardsForStatus(boardId: string, statusId: string | undefined) {
+  getCardsForStatus(
+    boardId: string,
+    statusId: string | undefined
+  ): Observable<Card[]> {
     this.statusId = statusId;
     this.boardId = boardId;
 
@@ -30,7 +34,7 @@ export class CardsService {
       `boards/${boardId}/statuses/${statusId}/cards`,
       ref => ref.orderBy("order", "asc")
     );
-    this.statusCards$ = this.statusCardsCollection
+    return (this.statusCards$ = this.statusCardsCollection
       .valueChanges({
         idField: "cardId"
       })
@@ -38,7 +42,7 @@ export class CardsService {
         map(cards => {
           return cards.sort((c1, c2) => c1.order - c2.order);
         })
-      );
+      ));
   }
 
   addCard(card: Card) {
@@ -47,6 +51,19 @@ export class CardsService {
 
   updateCardDescription(card: Card) {
     this.statusCardsCollection.doc(card.cardId).set(card);
+  }
+
+  updateCardsOrderWithinStatus(cards: Card[]) {
+    const batch = this.afs.firestore.batch();
+
+    cards.forEach(card => {
+      const docRef: DocumentReference = this.statusCardsCollection.doc(
+        card.cardId
+      ).ref;
+      batch.update(docRef, { order: card.order });
+    });
+
+    batch.commit();
   }
 
   deleteCard(card: Card) {

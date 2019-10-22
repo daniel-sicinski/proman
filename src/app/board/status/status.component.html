@@ -28,10 +28,16 @@
       </button>
     </mat-menu>
   </div>
-  <div class="status-card__cards-contaner">
+  <div
+    class="status-card__cards-contaner"
+    cdkDropList
+    cdkDropListOrientation="vertical"
+    (cdkDropListDropped)="onCardDrop($event)"
+  >
     <app-card
+      cdkDrag
       class="card-tile"
-      *ngFor="let card of statusCards$ | async; trackBy: trackByCards"
+      *ngFor="let card of cards; trackBy: trackByCards"
       [currentCard]="card"
       (editStateChange)="editStateChange.emit($event)"
     ></app-card>
