@@ -1,0 +1,42 @@
+.card-tile {
+  padding: 1rem;
+  background-color: rgb(214, 214, 214);
+  box-shadow: 0px 1px 2px 1px rgba(79, 79, 79, 0.37);
+  margin-bottom: 1rem;
+  transition: all 0.2s;
+  color: rgb(71, 71, 71);
+  font-size: 1.4rem;
+  border-radius: 0.3rem;
+  position: relative;
+
+  &:hover {
+    background-color: rgb(155, 155, 155);
+  }
+
+  &:hover .card-tile__edit-btn {
+    visibility: visible;
+    opacity: 1;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  &__edit-btn {
+    visibility: hidden;
+    opacity: 0;
+    background-color: rgba(155, 155, 155, 0.692);
+    border: none;
+    position: absolute;
+    top: -100rem;
+    border-radius: 0.2rem;
+    z-index: 5;
+    transition: visibility 0.3s, opacity 0.3s;
+
+    &:hover {
+      background-color: rgba(145, 145, 145, 0.699);
+    }
+
+    & mat-icon {
+      color: rgb(88, 88, 88);
+    }
+  }
+}

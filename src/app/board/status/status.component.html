@@ -12,6 +12,7 @@
       class="status-card__edit-name"
       [class.status-card__edit-name--hide]="!isNameEditVisible"
       type="text"
+      autofocus
     />
     <button
       mat-icon-button
@@ -28,13 +29,12 @@
     </mat-menu>
   </div>
   <div class="status-card__cards-contaner">
-    <div
+    <app-card
       class="card-tile"
       *ngFor="let card of statusCards$ | async; trackBy: trackByCards"
-    >
-      {{ card.description }}
-      <button class="card-tile__edit-btn"><mat-icon>edit</mat-icon></button>
-    </div>
+      [currentCard]="card"
+      (editStateChange)="editStateChange.emit($event)"
+    ></app-card>
   </div>
   <div
     class="status-card__add-btn"

@@ -26,6 +26,8 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 import { BoardComponent } from "./board/board.component";
 import { StatusComponent } from "./board/status/status.component";
+import { CardEditComponent } from './board/status/card-edit/card-edit.component';
+import { CardComponent } from './board/status/card/card.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { StatusComponent } from "./board/status/status.component";
     AuthComponent,
     DashboardComponent,
     BoardComponent,
-    StatusComponent
+    StatusComponent,
+    CardEditComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,

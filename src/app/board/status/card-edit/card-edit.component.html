@@ -1,0 +1,30 @@
+<div class="card-edit__wrapper" (click)="onCloseEditState($event)">
+  <div class="card-edit__container" #cardEditContainer>
+    <form
+      [formGroup]="cardEditForm"
+      (ngSubmit)="onEditSubmit()"
+      class="card-edit__form"
+    >
+      <textarea
+        cols="30"
+        rows="20"
+        class="card-edit__form-input"
+        matInput
+        placeholder="Add new description for this card..."
+        formControlName="description"
+        type="text"
+        autofocus
+      ></textarea>
+      <div class="card-edit__button-container">
+        <button
+          class="card-edit__submit-btn"
+          mat-raised-button
+          color="accent"
+          type="submit"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

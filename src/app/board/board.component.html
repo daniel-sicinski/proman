@@ -12,8 +12,21 @@
       <a mat-list-item (click)="onLogOut()">Logout</a>
     </mat-nav-list>
   </mat-toolbar>
-  <div cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" class="statuses-container">
-    <app-status *ngFor="let status of boardStatuses; trackBy: trackByStatuses" cdkDrag [status]="status" [boardId]="boardId"></app-status>
+  <div
+    cdkDropList
+    cdkDropListOrientation="horizontal"
+    (cdkDropListDropped)="drop($event)"
+    class="statuses-container"
+  >
+    <app-status
+      cdkDrag
+      *ngFor="let status of boardStatuses; trackBy: trackByStatuses"
+      [status]="status"
+      [boardId]="boardId"
+      (editStateChange)="cardEditState = $event"
+      [cdkDragDisabled]="cardEditState"
+    >
+    </app-status>
     <span
       class="add-status-panel"
       [ngClass]="{
@@ -61,3 +74,4 @@
     </div>
   </div>
 </div>
+<!-- <app-card-edit *ngIf="cardEditState"></app-card-edit> -->

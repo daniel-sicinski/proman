@@ -1,0 +1,54 @@
+.card-edit {
+  &__wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.664);
+    z-index: 10;
+  }
+
+  &__container {
+    z-index: 20;
+    position: absolute;
+    // top: 100px;
+    // left: 100px;
+  }
+
+  &__form {
+    width: 27rem;
+    background-color: transparent;
+    border-radius: 0.3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+  }
+
+  &__form-input {
+    width: 100%;
+    padding: 0.6rem 1.2rem 4rem;
+    border: none;
+    margin-bottom: 2rem;
+    background-color: white;
+    border-radius: 0.3rem;
+    outline: none;
+
+    &::-webkit-input-placeholder {
+      font-weight: 100;
+      font-size: 1.2rem;
+      font-family: inherit;
+      color: grey;
+    }
+
+    &__button-container {
+      display: flex;
+    }
+
+    &__submit-btn {
+      margin-right: 0.2rem;
+      cursor: pointer;
+      color: #dfdfdf;
+    }
+  }
+}

@@ -1,4 +1,11 @@
-import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
+import {
+  Component,
+  Input,
+  ChangeDetectionStrategy,
+  OnInit,
+  Output,
+  EventEmitter
+} from "@angular/core";
 import { StatusesService, Status } from "../statuses.service";
 import { CardsService, Card } from "./cards.service";
 import { Observable } from "rxjs";
@@ -13,9 +20,10 @@ import { FormControl } from "@angular/forms";
   providers: [CardsService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StatusComponent {
+export class StatusComponent implements OnInit {
   private _status: Status;
   @Input() boardId: string;
+  @Output() editStateChange = new EventEmitter<boolean>();
 
   @Input() set status(newValue: Status) {
     this._status = newValue;
@@ -27,7 +35,8 @@ export class StatusComponent {
   readonly editNameControl = new FormControl("");
 
   statusCards$: Observable<Card[]>;
-  addingCardState: false;
+  addingCardState = false;
+
   numberOfCards: number;
 
   newCardForm = this.fb.group({
@@ -50,6 +59,7 @@ export class StatusComponent {
       })
     );
   }
+
   onListDelete(): void {
     this.statusesService.deleteStatus(this._status);
   }
