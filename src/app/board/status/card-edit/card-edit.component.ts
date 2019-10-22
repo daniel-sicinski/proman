@@ -8,9 +8,9 @@ import {
   Output,
   Renderer2
 } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
+import { FormBuilder, Validators, FormGroup } from "@angular/forms";
 import { take } from "rxjs/operators";
-import { Card } from "../cards.service";
+import { Card, CardsService } from "../cards.service";
 
 @Component({
   selector: "app-card-edit",
@@ -22,14 +22,16 @@ export class CardEditComponent implements OnInit {
   @ViewChild("cardEditContainer", { static: false })
   cardEditContainer: ElementRef;
 
+  cardEditForm: FormGroup;
+
   @Input() cardPosition: ClientRect | DOMRect;
   @Input() editedCard: Card;
 
-  cardEditForm = this.fb.group({
-    description: [null, Validators.required]
-  });
-
-  constructor(private fb: FormBuilder, private renderer: Renderer2) {}
+  constructor(
+    private fb: FormBuilder,
+    private renderer: Renderer2,
+    private cardService: CardsService
+  ) {}
 
   ngAfterViewInit() {
     const { top, left } = this.cardPosition;
@@ -46,18 +48,36 @@ export class CardEditComponent implements OnInit {
     );
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.cardEditForm = this.fb.group({
+      description: [this.editedCard.description, Validators.required]
+    });
+  }
 
-  onCloseEditState(event: Event) {
-    const clickedElement = <HTMLElement>event.target;
+  onCloseEditState(event?: Event) {
+    if (event) {
+      const clickedElement = <HTMLElement>event.target;
 
-    const clickedOuterBound = clickedElement.classList.contains(
-      "card-edit__wrapper"
-    );
-    if (clickedOuterBound) {
+      const clickedOuterBound = clickedElement.classList.contains(
+        "card-edit__wrapper"
+      );
+      if (clickedOuterBound) {
+        this.closeEditState.emit();
+      }
+    } else {
       this.closeEditState.emit();
     }
   }
 
-  onEditSubmit() {}
+  onEditSubmit() {
+    if (!this.cardEditForm.value.description) return;
+
+    const updatedCard = {
+      ...this.editedCard,
+      description: this.cardEditForm.value.description
+    };
+    this.cardService.updateCardDescription(updatedCard);
+
+    this.onCloseEditState();
+  }
 }

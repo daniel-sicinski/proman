@@ -45,7 +45,9 @@ export class CardsService {
     this.statusCardsCollection.add(card);
   }
 
-  updateStatus(cardId: string, card: Card) {}
+  updateCardDescription(card: Card) {
+    this.statusCardsCollection.doc(card.cardId).set(card);
+  }
 
   deleteCard(card: Card) {
     console.log("delete card start...");

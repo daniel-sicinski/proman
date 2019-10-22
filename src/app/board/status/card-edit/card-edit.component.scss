@@ -12,12 +12,10 @@
   &__container {
     z-index: 20;
     position: absolute;
-    // top: 100px;
-    // left: 100px;
   }
 
   &__form {
-    width: 27rem;
+    width: 26rem;
     background-color: transparent;
     border-radius: 0.3rem;
     display: flex;
@@ -25,7 +23,7 @@
     align-items: left;
   }
 
-  &__form-input {
+  &__form-textarea {
     width: 100%;
     padding: 0.6rem 1.2rem 4rem;
     border: none;
@@ -33,15 +31,14 @@
     background-color: white;
     border-radius: 0.3rem;
     outline: none;
-
-    &::-webkit-input-placeholder {
-      font-weight: 100;
-      font-size: 1.2rem;
-      font-family: inherit;
-      color: grey;
-    }
-
-    &__button-container {
+    font-family: inherit;
+    resize: none // &::-webkit-input-placeholder {
+      //   font-weight: 100;
+      //   font-size: 1.2rem;
+      //   font-family: inherit;
+      //   color: grey;
+      // }
+      &__button-container {
       display: flex;
     }
 
