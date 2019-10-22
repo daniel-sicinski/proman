@@ -80,4 +80,9 @@ export class CardEditComponent implements OnInit {
 
     this.onCloseEditState();
   }
+
+  onCardDelete() {
+    this.cardService.deleteCard(this.editedCard);
+    this.onCloseEditState();
+  }
 }
