@@ -23,7 +23,6 @@ export class BoardComponent implements OnInit, OnDestroy {
   connectedTo: (string | undefined)[] = [];
 
   updateBoardStatusesSub: Subscription;
-  cardEditStateSub: Subscription;
 
   newStatusForm = this.fb.group({
     name: [null, Validators.required]
@@ -52,7 +51,6 @@ export class BoardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.updateBoardStatusesSub.unsubscribe();
-    this.cardEditStateSub.unsubscribe();
   }
 
   onStatusAdd() {
