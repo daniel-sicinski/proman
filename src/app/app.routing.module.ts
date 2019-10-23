@@ -15,7 +15,10 @@ const redirectUnauthorizedToLogin = () =>
 
 const routes: Routes = [
   { path: "", component: LandingPageComponent },
-  { path: "auth/:authType", component: AuthComponent },
+  {
+    path: "auth/:authType",
+    loadChildren: () => import("./auth/auth.module").then(m => m.AuthModule)
+  },
   {
     path: "dashboard",
     component: DashboardComponent,
