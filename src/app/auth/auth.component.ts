@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { FormBuilder, Validators, FormGroup } from "@angular/forms";
+import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Params } from "@angular/router";
-import { AuthService } from "./auth.service";
+import { AuthService } from "../core/services/auth.service";
 import { Subscription } from "rxjs";
 
 @Component({

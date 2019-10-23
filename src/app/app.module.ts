@@ -1,14 +1,8 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
-import { AngularFireModule } from "@angular/fire";
-import { AngularFirestoreModule } from "@angular/fire/firestore";
-import { AngularFireAuthModule } from "@angular/fire/auth";
-import { environment } from "../environments/environment";
 import { AppRoutingModule } from "./app.routing.module";
-import { ReactiveFormsModule } from "@angular/forms";
 
 import { AppComponent } from "./app.component";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { LandingPageComponent } from "./landing-page/landing-page.component";
 import { AuthComponent } from "./auth/auth.component";
 
@@ -21,13 +15,14 @@ import { MatButtonModule } from "@angular/material";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { MatIconModule } from "@angular/material";
 import { MatMenuModule } from "@angular/material";
-import { DragDropModule } from '@angular/cdk/drag-drop';
+import { DragDropModule } from "@angular/cdk/drag-drop";
 import { DashboardComponent } from "./dashboard/dashboard.component";
-import { AngularFireAuthGuard } from "@angular/fire/auth-guard";
 import { BoardComponent } from "./board/board.component";
 import { StatusComponent } from "./board/status/status.component";
-import { CardEditComponent } from './board/status/card-edit/card-edit.component';
-import { CardComponent } from './board/status/card/card.component';
+import { CardEditComponent } from "./board/status/card-edit/card-edit.component";
+import { CardComponent } from "./board/status/card/card.component";
+import { CoreModule } from "./core/core.module";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -42,11 +37,8 @@ import { CardComponent } from './board/status/card/card.component';
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     ReactiveFormsModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
-    AngularFireAuthModule,
+    CoreModule,
     MatToolbarModule,
     MatListModule,
     MatInputModule,
@@ -59,7 +51,6 @@ import { CardComponent } from './board/status/card/card.component';
     DragDropModule,
     AppRoutingModule
   ],
-  providers: [AngularFireAuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

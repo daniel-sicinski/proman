@@ -1,15 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { Subscription, Observable } from "rxjs";
-import { AuthService } from "../auth/auth.service";
-import { take, exhaustMap } from "rxjs/operators";
-import {
-  AngularFirestore,
-  AngularFirestoreDocument
-} from "@angular/fire/firestore";
-import { User } from "firebase";
-import { BoardsService, Board } from "./boards.service";
+import { Observable } from "rxjs";
+import { AuthService } from "../core/services/auth.service";
+import { AngularFirestore } from "@angular/fire/firestore";
+import { BoardsService, Board } from "../core/services/boards.service";
 import { FormBuilder, Validators } from "@angular/forms";
-import { ActivatedRoute, Data } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-dashboard",

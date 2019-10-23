@@ -3,7 +3,7 @@ import { StatusesService, Status } from "./statuses.service";
 import { Observable } from "rxjs/internal/Observable";
 import { ActivatedRoute, Params } from "@angular/router";
 import { Validators, FormBuilder } from "@angular/forms";
-import { AuthService } from "../auth/auth.service";
+import { AuthService } from "../core/services/auth.service";
 import { CdkDragDrop } from "@angular/cdk/drag-drop";
 import { Subscription } from "rxjs";
 
