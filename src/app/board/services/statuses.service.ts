@@ -1,87 +1,75 @@
 import { Injectable } from "@angular/core";
-import * as firebase from "firebase/app";
 import {
   AngularFirestore,
-  AngularFirestoreCollection,
-  DocumentReference
+  AngularFirestoreCollection
 } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
-import { map, take, tap } from "rxjs/operators";
-
-export interface Status {
-  name: string;
-  order: number;
-  statusId?: string;
-}
+import { map } from "rxjs/operators";
+import { Status } from "../models/Status";
+import { FirestoreApiService } from "src/app/core/services/firestore-api.service";
 
 @Injectable()
 export class StatusesService {
-  private boardStatusesCollection: AngularFirestoreCollection<Status>;
+  private boardStatusesCollectionRef: AngularFirestoreCollection<Status>;
+  private boardStatuses: Status[] = [];
+
   boardStatuses$: Observable<Status[]>;
-  boardId: string;
 
-  constructor(private readonly afs: AngularFirestore) {}
+  constructor(
+    private readonly afs: AngularFirestore,
+    private firestoreApiService: FirestoreApiService
+  ) {}
 
-  getStatusesOfBoard(boardId: string) {
-    this.boardId = boardId;
-    this.boardStatusesCollection = this.afs.collection<Status>(
-      `boards/${boardId}/statuses`,
-      ref => ref.orderBy("order", "asc")
+  getStatusesOfBoard(boardId: string): void {
+    this.boardStatusesCollectionRef = this.afs.collection<Status>(
+      `boards/${boardId}/statuses`
     );
-    this.boardStatuses$ = this.boardStatusesCollection
+
+    this.boardStatuses$ = this.boardStatusesCollectionRef
       .valueChanges({
-        idField: "statusId"
+        idField: "id"
       })
       .pipe(
         map(statuses => {
-          return statuses.sort((st1, st2) => st1.order - st2.order);
+          const sortedStatuses = statuses.sort(
+            (st1, st2) => st1.order - st2.order
+          );
+          this.boardStatuses = sortedStatuses;
+          return sortedStatuses;
         })
       );
   }
 
-  addStatus(status: Status) {
-    this.boardStatusesCollection.add(status);
+  addStatus(status: Status): void {
+    this.boardStatusesCollectionRef.add(status);
   }
 
   updateStatusName(statusId: string, name: string): void {
-    this.boardStatusesCollection.doc<Status>(statusId).update({ name });
+    this.boardStatusesCollectionRef.doc<Status>(statusId).update({ name });
   }
 
-  updateStatusesOrder(statuses: Status[]) {
+  updateStatusesOrder(statusesCollectionWithNewOrder: Status[]): void {
     const batch = this.afs.firestore.batch();
 
-    statuses.forEach(status => {
-      const docRef: DocumentReference = this.boardStatusesCollection.doc(
-        status.statusId
-      ).ref;
-      batch.update(docRef, { order: status.order });
-    });
-
-    batch.commit();
+    this.firestoreApiService.updateOrderOfDocumentsInCollection<Status>(
+      this.boardStatusesCollectionRef,
+      statusesCollectionWithNewOrder,
+      batch
+    );
   }
 
-  deleteStatus(status: Status) {
+  deleteStatus(statusToDelete: Status): void {
     const batch = this.afs.firestore.batch();
-    batch.delete(this.boardStatusesCollection.doc(status.statusId).ref);
+    batch.delete(this.boardStatusesCollectionRef.doc(statusToDelete.id).ref);
 
-    this.afs
-      .collection<Status>(`boards/${this.boardId}/statuses`, ref =>
-        ref.where("order", ">", status.order)
-      )
-      .snapshotChanges()
-      .pipe(
-        take(1),
-        map(actions => actions.map(a => a.payload.doc.ref)),
-        tap(references => {
-          references.forEach(r =>
-            batch.update(r, {
-              order: firebase.firestore.FieldValue.increment(-1)
-            })
-          );
-        })
-      )
-      .subscribe(() => {
-        batch.commit();
-      });
+    const filteredOutStatuses = this.boardStatuses.filter(
+      status => status !== statusToDelete
+    );
+
+    this.firestoreApiService.updateOrderOfDocumentsInCollection<Status>(
+      this.boardStatusesCollectionRef,
+      filteredOutStatuses,
+      batch
+    );
   }
 }
