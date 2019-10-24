@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { StatusesService, Status } from "./statuses.service";
+import { StatusesService, Status } from "./services/statuses.service";
 import { Observable } from "rxjs/internal/Observable";
 import { ActivatedRoute, Params } from "@angular/router";
 import { Validators, FormBuilder } from "@angular/forms";

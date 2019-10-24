@@ -6,7 +6,7 @@ import {
   EventEmitter,
   ElementRef
 } from "@angular/core";
-import { StatusesService, Status } from "../statuses.service";
+import { StatusesService, Status } from "../services/statuses.service";
 import { CardsService, Card } from "./cards.service";
 import { Observable } from "rxjs";
 import { Validators, FormBuilder } from "@angular/forms";

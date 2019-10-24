@@ -6,9 +6,7 @@ import {
 } from "@angular/fire/auth-guard";
 
 import { NgModule } from "@angular/core";
-import { AuthComponent } from "./auth/auth.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
-import { BoardComponent } from "./board/board.component";
 
 const redirectUnauthorizedToLogin = () =>
   redirectUnauthorizedTo(["auth", "logIn"]);
@@ -27,9 +25,7 @@ const routes: Routes = [
   },
   {
     path: "boards/:boardId",
-    component: BoardComponent,
-    canActivate: [AngularFireAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin }
+    loadChildren: () => import("./board/board.module").then(m => m.BoardModule)
   }
 ];
 
