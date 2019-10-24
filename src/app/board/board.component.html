@@ -5,14 +5,14 @@
   ></app-navbar>
   <div
     cdkDropList
-    [cdkDropListData]="boardStatuses"
+    [cdkDropListData]="boardStatuses$ | async"
     cdkDropListOrientation="horizontal"
-    (cdkDropListDropped)="drop($event)"
+    (cdkDropListDropped)="onStatusDrop($event)"
     class="statuses-container"
   >
     <app-status
       cdkDrag
-      *ngFor="let status of boardStatuses; trackBy: trackByStatuses"
+      *ngFor="let status of boardStatuses$ | async; trackBy: trackByStatuses"
       [status]="status"
       [boardId]="boardId"
       (editStateChange)="cardEditState = $event"
