@@ -1,27 +1,23 @@
-import { LandingPageComponent } from "./landing-page/landing-page.component";
-import { Routes, RouterModule } from "@angular/router";
-import {
-  AngularFireAuthGuard,
-  redirectUnauthorizedTo
-} from "@angular/fire/auth-guard";
+import { Routes, RouterModule, PreloadAllModules } from "@angular/router";
 
 import { NgModule } from "@angular/core";
-import { DashboardComponent } from "./dashboard/dashboard.component";
-
-const redirectUnauthorizedToLogin = () =>
-  redirectUnauthorizedTo(["auth", "logIn"]);
 
 const routes: Routes = [
-  { path: "", component: LandingPageComponent },
+  {
+    path: "",
+    loadChildren: () =>
+      import("./landing-page/landing-page.module").then(
+        m => m.LandingPageModule
+      )
+  },
   {
     path: "auth/:authType",
     loadChildren: () => import("./auth/auth.module").then(m => m.AuthModule)
   },
   {
     path: "dashboard",
-    component: DashboardComponent,
-    canActivate: [AngularFireAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin }
+    loadChildren: () =>
+      import("./dashboard/dashboard.module").then(m => m.DashboardModule)
   },
   {
     path: "boards/:boardId",
@@ -30,7 +26,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
