@@ -12,11 +12,16 @@ import {
   MatMenuModule
 } from "@angular/material";
 import { DragDropModule } from "@angular/cdk/drag-drop";
+import { NavbarComponent } from "./components/navbar/navbar.component";
+import { ReactiveFormsModule } from "@angular/forms";
+import { RouterModule } from "@angular/router";
 
 @NgModule({
-  declarations: [],
+  declarations: [NavbarComponent],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
     MatToolbarModule,
     MatListModule,
     MatInputModule,
@@ -38,7 +43,8 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
     MatProgressSpinnerModule,
     MatIconModule,
     MatMenuModule,
-    DragDropModule
+    DragDropModule,
+    NavbarComponent
   ]
 })
 export class SharedModule {}

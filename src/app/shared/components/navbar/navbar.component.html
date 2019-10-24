@@ -1,0 +1,17 @@
+<mat-toolbar color="primary" class="navbar">
+  <mat-nav-list *ngIf="showBoardNavigation()">
+    <a mat-list-item [routerLink]="['/dashboard']"><mat-icon>home</mat-icon></a>
+  </mat-nav-list>
+  <div class="logo-wrapper" [routerLink]="['/']">
+    <img src="../../assets/images/proman-logo.png" alt="Logo" />
+  </div>
+  <mat-nav-list>
+    <a *ngIf="showSignUpBtn()" mat-list-item [routerLink]="['/auth', 'signUp']"
+      >Sign up</a
+    >
+    <a *ngIf="showLoginBtn()" mat-list-item [routerLink]="['/auth', 'logIn']"
+      >Login</a
+    >
+    <a *ngIf="showLogoutBtn()" mat-list-item (click)="onLogOut()">Logout</a>
+  </mat-nav-list>
+</mat-toolbar>

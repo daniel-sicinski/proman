@@ -1,17 +1,5 @@
 <div class="auth-container">
-  <mat-toolbar color="primary">
-    <div class="logo-wrapper" [routerLink]="['/']">
-      <img src="../../assets/images/proman-logo.png" alt="Logo" />
-    </div>
-    <mat-nav-list>
-      <a *ngIf="loginState" mat-list-item [routerLink]="['/auth', 'signUp']"
-        >Sign up</a
-      >
-      <a *ngIf="!loginState" mat-list-item [routerLink]="['/auth', 'logIn']"
-        >Login</a
-      >
-    </mat-nav-list>
-  </mat-toolbar>
+  <app-navbar [usedInComponent]="'auth'" [loginState]="loginState"></app-navbar>
   <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
     <mat-card *ngIf="errorMessage" class="error-message-card">
       <mat-card-content>{{ errorMessage }}</mat-card-content>
