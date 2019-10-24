@@ -10,7 +10,7 @@ import { Subscription } from "rxjs";
   styleUrls: ["./auth.component.scss"]
 })
 export class AuthComponent implements OnInit, OnDestroy {
-  fetchingDataFromServer: boolean;
+  fetchingDataFromServer = false;
   loginState = false;
   errorMessage: string | null = null;
 
@@ -25,7 +25,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     password: [null, Validators.required]
   });
 
-  authForm = this.signUpForm;
+  private authForm = this.signUpForm;
 
   readonly updateErrorMessageSub: Subscription = this.authService.authErrorMessage$.subscribe(
     errorMessage => {
