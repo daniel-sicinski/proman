@@ -1,10 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { AuthService } from "../core/services/auth.service";
-import { AngularFirestore } from "@angular/fire/firestore";
-import { BoardsService, Board } from "../core/services/boards.service";
+import { BoardsService } from "../core/services/boards.service";
 import { FormBuilder, Validators } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { Board } from "./models/Board";
 
 @Component({
   selector: "app-dashboard",
@@ -21,24 +20,22 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private readonly authService: AuthService,
-    private readonly afs: AngularFirestore,
     private readonly boardsService: BoardsService,
-    private readonly fb: FormBuilder,
-    private readonly route: ActivatedRoute
+    private readonly fb: FormBuilder
   ) {}
 
   ngOnInit() {
     this.userBoards$ = this.boardsService.userBoards$;
   }
 
-  onLogOut() {
+  onLogOut(): void {
     this.authService.logOut();
   }
 
-  onNewBoardSubmit() {
+  onNewBoardSubmit(): void {
     const { title } = this.newBoardForm.value;
     this.boardsService.addBoard(title);
     this.addBoardModalOpened = false;
-    this.newBoardForm.value.title = null;
+    this.newBoardForm.reset();
   }
 }

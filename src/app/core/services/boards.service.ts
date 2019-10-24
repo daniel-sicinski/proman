@@ -1,40 +1,29 @@
-import { Injectable, OnDestroy } from "@angular/core";
+import { Injectable, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "./auth.service";
 import {
   AngularFirestore,
   AngularFirestoreCollection
 } from "@angular/fire/firestore";
 import { Subscription, Observable } from "rxjs";
-
-export interface Board {
-  title: string;
-  userId: string;
-  boardId?: string;
-}
+import { Board } from "src/app/dashboard/models/Board";
 
 @Injectable({ providedIn: "root" })
 export class BoardsService implements OnDestroy {
   private userBoardsCollection: AngularFirestoreCollection<Board>;
-  userBoards$: Observable<Board[]>;
-  currentUserId: string;
+  private currentUserId: string;
 
-  userSnapshotSub: Subscription;
+  userBoards$: Observable<Board[]>;
+
+  private userSnapshotSub: Subscription;
 
   constructor(
     private readonly authService: AuthService,
     private readonly afs: AngularFirestore
   ) {
+    // Put in constructor, because the code does not work in ngOnInit
     this.userSnapshotSub = this.authService.user$.subscribe(userSnapshot => {
       if (userSnapshot) {
-        this.currentUserId = userSnapshot.uid;
-
-        this.userBoardsCollection = this.afs.collection<Board>(`boards`, ref =>
-          ref.where("userId", "==", userSnapshot.uid)
-        );
-
-        this.userBoards$ = this.userBoardsCollection.valueChanges({
-          idField: "boardId"
-        });
+        this.initializeDashboard(userSnapshot);
       }
     });
   }
@@ -53,5 +42,17 @@ export class BoardsService implements OnDestroy {
 
   deleteBoard(boardId: string): void {
     this.userBoardsCollection.doc(boardId).delete();
+  }
+
+  initializeDashboard(userSnapshot: firebase.User | null): void {
+    this.currentUserId = userSnapshot!.uid;
+
+    this.userBoardsCollection = this.afs.collection<Board>(`boards`, ref =>
+      ref.where("userId", "==", userSnapshot!.uid)
+    );
+
+    this.userBoards$ = this.userBoardsCollection.valueChanges({
+      idField: "boardId"
+    });
   }
 }
