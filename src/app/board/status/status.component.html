@@ -22,14 +22,14 @@
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu" class="status-card__menu">
-      <button mat-menu-item (click)="onListDelete()">
+      <button mat-menu-item (click)="onStatusDelete()">
         <mat-icon>delete</mat-icon>
         <span>Remove list</span>
       </button>
     </mat-menu>
   </div>
   <div
-    id="{{ status.statusId }}"
+    id="{{ status.id }}"
     class="status-card__cards-contaner"
     cdkDropList
     [cdkDropListData]="cards"
