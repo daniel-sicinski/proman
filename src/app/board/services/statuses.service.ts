@@ -56,20 +56,19 @@ export class StatusesService {
       statusesCollectionWithNewOrder,
       batch
     );
+
+    batch.commit();
   }
 
   deleteStatus(statusToDelete: Status): void {
-    const batch = this.afs.firestore.batch();
-    batch.delete(this.boardStatusesCollectionRef.doc(statusToDelete.id).ref);
-
     const filteredOutStatuses = this.boardStatuses.filter(
       status => status !== statusToDelete
     );
 
-    this.firestoreApiService.updateOrderOfDocumentsInCollection<Status>(
+    this.firestoreApiService.deleteDocumentAndUpdateOrder(
       this.boardStatusesCollectionRef,
-      filteredOutStatuses,
-      batch
+      statusToDelete,
+      filteredOutStatuses
     );
   }
 }

@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import {
   AngularFirestoreCollection,
-  DocumentReference
+  DocumentReference,
+  AngularFirestore
 } from "@angular/fire/firestore";
 
 interface DocumentType {
@@ -12,7 +13,7 @@ interface DocumentType {
   providedIn: "root"
 })
 export class FirestoreApiService {
-  constructor() {}
+  constructor(private readonly afs: AngularFirestore) {}
 
   updateOrderOfDocumentsInCollection<T extends DocumentType>(
     documentCollectionRef: AngularFirestoreCollection<T>,
@@ -24,7 +25,22 @@ export class FirestoreApiService {
         .ref;
       batchRef.update(docRef, { order: index + 1 });
     });
+  }
 
-    batchRef.commit();
+  deleteDocumentAndUpdateOrder<T extends DocumentType>(
+    documentCollectionRef: AngularFirestoreCollection<T>,
+    documentToDelete: T,
+    filteredOutCollection: T[]
+  ) {
+    const batch = this.afs.firestore.batch();
+    batch.delete(documentCollectionRef.doc(documentToDelete.id).ref);
+
+    this.updateOrderOfDocumentsInCollection<T>(
+      documentCollectionRef,
+      filteredOutCollection,
+      batch
+    );
+
+    batch.commit();
   }
 }
