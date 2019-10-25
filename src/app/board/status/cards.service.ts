@@ -1,64 +1,61 @@
 import { Injectable } from "@angular/core";
 import {
   AngularFirestore,
-  AngularFirestoreCollection,
-  DocumentReference
+  AngularFirestoreCollection
 } from "@angular/fire/firestore";
 import { Observable } from "rxjs";
-import { map, take, tap } from "rxjs/operators";
-import * as firebase from "firebase";
-// import undefined = require("firebase/empty-import");
-
-export interface Card {
-  description: string;
-  order: number;
-  cardId?: string;
-}
+import { map } from "rxjs/operators";
+import { FirestoreApiService } from "src/app/core/services/firestore-api.service";
+import { Card } from "./card/models/Card";
 
 @Injectable()
 export class CardsService {
-  private statusCardsCollection: AngularFirestoreCollection<Card>;
-  statusCards$: Observable<Card[]>;
-  statusId: string | undefined;
-  boardId: string;
+  private statusCardsCollectionRef: AngularFirestoreCollection<Card>;
+  private cards: Card[] = [];
+  private boardId: string;
 
-  constructor(private readonly afs: AngularFirestore) {}
+  statusCards$: Observable<Card[]>;
+
+  constructor(
+    private readonly afs: AngularFirestore,
+    private readonly firestoreApiService: FirestoreApiService
+  ) {}
 
   getCardsForStatus(
     boardId: string,
     statusId: string | undefined
   ): Observable<Card[]> {
-    this.statusId = statusId;
     this.boardId = boardId;
 
-    this.statusCardsCollection = this.afs.collection<Card>(
-      `boards/${boardId}/statuses/${statusId}/cards`,
-      ref => ref.orderBy("order", "asc")
+    this.statusCardsCollectionRef = this.afs.collection<Card>(
+      `boards/${boardId}/statuses/${statusId}/cards`
     );
-    return (this.statusCards$ = this.statusCardsCollection
+    return (this.statusCards$ = this.statusCardsCollectionRef
       .valueChanges({
-        idField: "cardId"
+        idField: "id"
       })
       .pipe(
         map(cards => {
-          return cards.sort((c1, c2) => c1.order - c2.order);
+          const cardsCollection = cards.sort((c1, c2) => c1.order - c2.order);
+          this.cards = cardsCollection;
+          return cardsCollection;
         })
       ));
   }
 
-  addCard(card: Card) {
-    this.statusCardsCollection.add(card);
+  addCard(card: Card): void {
+    this.statusCardsCollectionRef.add(card);
   }
 
-  updateCardDescription(card: Card) {
-    this.statusCardsCollection.doc(card.cardId).set(card);
+  updateCardDescription(card: Card): void {
+    this.statusCardsCollectionRef.doc(card.id).set(card);
   }
 
   updateCardsOrderWithinStatus(cardsInNewOrder: Card[]) {
     const batch = this.afs.firestore.batch();
 
-    this.updateOrderOfCardsInFirestore(
-      this.statusCardsCollection,
+    this.firestoreApiService.updateOrderOfDocumentsInCollection<Card>(
+      this.statusCardsCollectionRef,
       cardsInNewOrder,
       batch
     );
@@ -71,7 +68,7 @@ export class CardsService {
     card: Card,
     previousStatusCollection: Card[],
     newStatusCollection: Card[]
-  ) {
+  ): void {
     let batch = this.afs.firestore.batch();
 
     // Update previous status
@@ -79,21 +76,21 @@ export class CardsService {
       `boards/${this.boardId}/statuses/${previousStatusId}/cards`
     );
 
-    batch.delete(previousCardsCollectionRef.doc(card.cardId).ref);
+    batch.delete(previousCardsCollectionRef.doc(card.id).ref);
 
-    this.updateOrderOfCardsInFirestore(
+    this.firestoreApiService.updateOrderOfDocumentsInCollection<Card>(
       previousCardsCollectionRef,
       previousStatusCollection,
       batch
     );
 
     // Update new status
-    batch.set(this.statusCardsCollection.doc(card.cardId).ref, {
+    batch.set(this.statusCardsCollectionRef.doc(card.id).ref, {
       ...card
     });
 
-    this.updateOrderOfCardsInFirestore(
-      this.statusCardsCollection,
+    this.firestoreApiService.updateOrderOfDocumentsInCollection<Card>(
+      this.statusCardsCollectionRef,
       newStatusCollection,
       batch
     );
@@ -101,42 +98,13 @@ export class CardsService {
     batch.commit();
   }
 
-  deleteCard(card: Card) {
-    console.log("delete card start...");
+  deleteCard(cardToDelete: Card): void {
+    const filteredOutCards = this.cards.filter(card => card !== cardToDelete);
 
-    const batch = this.afs.firestore.batch();
-    batch.delete(this.statusCardsCollection.doc(card.cardId).ref);
-
-    this.afs
-      .collection<Card>(
-        `boards/${this.boardId}/statuses/${this.statusId}/cards`,
-        ref => ref.where("order", ">", card.order)
-      )
-      .snapshotChanges()
-      .pipe(
-        take(1),
-        map(actions => actions.map(a => a.payload.doc.ref)),
-        tap(references => {
-          references.forEach(r =>
-            batch.update(r, {
-              order: firebase.firestore.FieldValue.increment(-1)
-            })
-          );
-        })
-      )
-      .subscribe(() => {
-        batch.commit().then(() => console.log("batch completed!"));
-      });
-  }
-
-  updateOrderOfCardsInFirestore(
-    cardsCollectionRef: AngularFirestoreCollection<Card>,
-    collectionWithNewOrder: Card[],
-    batch: firebase.firestore.WriteBatch
-  ) {
-    collectionWithNewOrder.forEach((card, index) => {
-      const docRef: DocumentReference = cardsCollectionRef.doc(card.cardId).ref;
-      batch.update(docRef, { order: index + 1 });
-    });
+    this.firestoreApiService.deleteDocumentAndUpdateOrder(
+      this.statusCardsCollectionRef,
+      cardToDelete,
+      filteredOutCards
+    );
   }
 }
