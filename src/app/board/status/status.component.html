@@ -1,7 +1,7 @@
 <div class="status-card">
   <div class="status-card__update-container">
     <div (click)="showEditName(); focus(editName)" class="status-card__name">
-      {{ name }}
+      {{ statusName }}
     </div>
     <input
       #editName
@@ -32,7 +32,7 @@
     id="{{ status.id }}"
     class="status-card__cards-contaner"
     cdkDropList
-    [cdkDropListData]="cards"
+    [cdkDropListData]="statusCards$ | async"
     [cdkDropListConnectedTo]="connectedTo"
     cdkDropListOrientation="vertical"
     (cdkDropListDropped)="onCardDrop($event)"
@@ -40,7 +40,7 @@
     <app-card
       cdkDrag
       class="card-tile"
-      *ngFor="let card of cards; trackBy: trackByCards"
+      *ngFor="let card of statusCards$ | async; trackBy: trackByCards"
       [currentCard]="card"
       (editStateChange)="editStateChange.emit($event)"
     ></app-card>

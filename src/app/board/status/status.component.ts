@@ -1,75 +1,65 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  Output,
-  EventEmitter,
-  ElementRef
-} from "@angular/core";
-import { StatusesService, Status } from "../services/statuses.service";
-import { CardsService, Card } from "./cards.service";
+import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
+import { StatusesService } from "../services/statuses.service";
+import { CardsService } from "./cards.service";
 import { Observable } from "rxjs";
 import { Validators, FormBuilder } from "@angular/forms";
-import { FormControl } from "@angular/forms";
-import {
-  CdkDragDrop,
-  moveItemInArray,
-  transferArrayItem
-} from "@angular/cdk/drag-drop";
+import { CdkDragDrop } from "@angular/cdk/drag-drop";
+import { Status } from "../models/Status";
+import { Card } from "./card/models/Card";
+import { DragAndDropService } from "../services/drag-and-drop.service";
+import { tap } from "rxjs/operators";
 
 @Component({
   selector: "app-status",
   templateUrl: "./status.component.html",
   styleUrls: ["./status.component.scss"],
-  providers: [CardsService]
+  providers: [CardsService, DragAndDropService]
 })
 export class StatusComponent implements OnInit {
   private _status: Status;
+  private statusName: string;
+  private numberOfCards: number;
+
+  isNameEditVisible = false;
+  addingCardState = false;
+
+  statusCards$: Observable<Card[]>;
+
   @Input() boardId: string;
   @Input() connectedTo: (string | undefined)[];
   @Output() editStateChange = new EventEmitter<boolean>();
-  cards: Card[] = [];
 
   @Input() set status(newValue: Status) {
     this._status = newValue;
-    this.name = newValue.name;
+    this.statusName = newValue.name;
   }
 
   get status() {
     return this._status;
   }
 
-  name = "";
-  isNameEditVisible = false;
-  readonly editNameControl = new FormControl("");
-
-  statusCards$: Observable<Card[]>;
-  addingCardState = false;
-
-  numberOfCards: number;
-
   newCardForm = this.fb.group({
     description: [null, Validators.required]
   });
 
+  editNameControl = this.fb.control({
+    description: [this.statusName, Validators.required]
+  });
+
   constructor(
-    private statusesService: StatusesService,
-    private fb: FormBuilder,
-    private cardsService: CardsService
+    private readonly statusesService: StatusesService,
+    private readonly fb: FormBuilder,
+    private readonly cardsService: CardsService,
+    private readonly dragAndDropService: DragAndDropService
   ) {}
 
-  cardContainer: ElementRef;
-
   ngOnInit() {
-    this.cardsService
-      .getCardsForStatus(this.boardId, this._status.statusId)
-      .subscribe(cards => {
-        this.cards = [...cards];
-        this.numberOfCards = cards.length;
-      });
+    this.statusCards$ = this.cardsService
+      .getCardsForStatus(this.boardId, this._status.id)
+      .pipe(tap(cards => (this.numberOfCards = cards.length)));
   }
 
-  onListDelete(): void {
+  onStatusDelete(): void {
     this.statusesService.deleteStatus(this._status);
   }
 
@@ -90,9 +80,9 @@ export class StatusComponent implements OnInit {
       return;
     }
 
-    this.name = newName;
+    this.statusName = newName;
     this.statusesService.updateStatusName(
-      this._status.statusId!,
+      this._status.id!,
       this.editNameControl.value
     );
   }
@@ -108,35 +98,10 @@ export class StatusComponent implements OnInit {
   }
 
   trackByCards(index: number, card: Card): string | undefined {
-    return card.cardId;
+    return card.id;
   }
 
   onCardDrop(event: CdkDragDrop<Card[]>): void {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-
-      this.cardsService.updateCardsOrderWithinStatus(event.container.data);
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-
-      const previousStatusId = event.previousContainer.element.nativeElement.id;
-      const cardToMove = event.container.data[event.currentIndex];
-
-      this.cardsService.changeCardStatus(
-        previousStatusId,
-        cardToMove,
-        event.previousContainer.data,
-        event.container.data
-      );
-    }
+    this.dragAndDropService.onCardDrop(event);
   }
 }
