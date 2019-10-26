@@ -9,8 +9,8 @@ import {
   Renderer2
 } from "@angular/core";
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
-import { take } from "rxjs/operators";
-import { Card, CardsService } from "../cards.service";
+import { CardsService } from "../cards.service";
+import { Card } from "../card/models/Card";
 
 @Component({
   selector: "app-card-edit",

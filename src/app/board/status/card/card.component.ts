@@ -7,7 +7,7 @@ import {
   EventEmitter,
   Output
 } from "@angular/core";
-import { Card } from "../cards.service";
+import { Card } from "./models/Card";
 
 @Component({
   selector: "app-card",
