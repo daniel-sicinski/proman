@@ -39,11 +39,11 @@ export class StatusComponent implements OnInit {
   }
 
   newCardForm = this.fb.group({
-    description: [null, Validators.required]
+    title: [null, Validators.required]
   });
 
   editNameControl = this.fb.control({
-    description: [this.statusName, Validators.required]
+    title: [this.statusName, Validators.required]
   });
 
   constructor(
@@ -90,8 +90,8 @@ export class StatusComponent implements OnInit {
   onCardAdd() {
     if (!this.newCardForm.valid) return;
 
-    const { description } = this.newCardForm.value;
-    this.cardsService.addCard({ description, order: this.numberOfCards + 1 });
+    const { title } = this.newCardForm.value;
+    this.cardsService.addCard({ title, order: this.numberOfCards + 1 });
 
     this.addingCardState = false;
     this.newCardForm.reset();

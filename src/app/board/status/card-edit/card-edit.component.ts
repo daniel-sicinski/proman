@@ -50,7 +50,7 @@ export class CardEditComponent implements OnInit {
 
   ngOnInit() {
     this.cardEditForm = this.fb.group({
-      description: [this.editedCard.description, Validators.required]
+      title: [this.editedCard.title, Validators.required]
     });
   }
 
@@ -70,13 +70,13 @@ export class CardEditComponent implements OnInit {
   }
 
   onEditSubmit() {
-    if (!this.cardEditForm.value.description) return;
+    if (!this.cardEditForm.value.title) return;
 
     const updatedCard = {
       ...this.editedCard,
-      description: this.cardEditForm.value.description
+      title: this.cardEditForm.value.title
     };
-    this.cardService.updateCardDescription(updatedCard);
+    this.cardService.updateCardTitle(updatedCard);
 
     this.onCloseEditState();
   }

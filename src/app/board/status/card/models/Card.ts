@@ -10,9 +10,9 @@ interface Checklist {
 
 export interface Card {
   title: string;
-  description: string;
   order: number;
+  description?: string;
   id?: string;
-  due_date: Date;
-  checklist: Checklist;
+  due_date?: Date;
+  checklist?: Checklist;
 }

@@ -47,7 +47,7 @@ export class CardsService {
     this.statusCardsCollectionRef.add(card);
   }
 
-  updateCardDescription(card: Card): void {
+  updateCardTitle(card: Card): void {
     this.statusCardsCollectionRef.doc(card.id).set(card);
   }
 
