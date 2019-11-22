@@ -15,6 +15,6 @@
 ></app-card-edit>
 <app-card-detail
   *ngIf="displayCardDetailState"
-  [editedCard]="currentCard"
+  [currentCard]="currentCard"
   (closeDisplayCardDetailState)="displayCardDetailState = false"
 ></app-card-detail>

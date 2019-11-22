@@ -1,1 +1,9 @@
-<p>card-detail works!</p>
+<div
+  class="card-detail__wrapper"
+  (click)="onCloseDisplayCardDetailState($event)"
+>
+  <div class="card-detail__container" #cardEditContainer>
+    <div class="card-detail__data">{{ currentCard.title }}</div>
+    <div class="card-detail__actions">Add checklist</div>
+  </div>
+</div>

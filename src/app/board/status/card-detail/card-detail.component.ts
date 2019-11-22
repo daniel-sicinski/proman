@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Card } from "../card/models/Card";
 
 @Component({
@@ -7,9 +7,27 @@ import { Card } from "../card/models/Card";
   styleUrls: ["./card-detail.component.scss"]
 })
 export class CardDetailComponent implements OnInit {
-  @Input() editedCard: Card;
+  @Input() currentCard: Card;
+  @Output() closeDisplayCardDetailState: EventEmitter<
+    void
+  > = new EventEmitter();
 
   constructor() {}
 
   ngOnInit() {}
+
+  onCloseDisplayCardDetailState(e: Event) {
+    if (event) {
+      const clickedElement = <HTMLElement>event.target;
+
+      const clickedOuterBound = clickedElement.classList.contains(
+        "card-detail__wrapper"
+      );
+      if (clickedOuterBound) {
+        this.closeDisplayCardDetailState.emit();
+      }
+    } else {
+      this.closeDisplayCardDetailState.emit();
+    }
+  }
 }
