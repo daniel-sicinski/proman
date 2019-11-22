@@ -8,6 +8,7 @@ import { Card } from "../card/models/Card";
 })
 export class CardDetailComponent implements OnInit {
   @Input() currentCard: Card;
+  @Input() statusName: string;
   @Output() closeDisplayCardDetailState: EventEmitter<
     void
   > = new EventEmitter();

@@ -16,6 +16,7 @@ import { Card } from "./models/Card";
 })
 export class CardComponent implements OnInit {
   @Input() currentCard: Card;
+  @Input() statusName: string;
   @Output() editStateChange = new EventEmitter<boolean>();
   @ViewChild("card", { static: false })
   card: ElementRef;

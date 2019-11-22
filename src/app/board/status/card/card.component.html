@@ -16,5 +16,6 @@
 <app-card-detail
   *ngIf="displayCardDetailState"
   [currentCard]="currentCard"
+  [statusName]="statusName"
   (closeDisplayCardDetailState)="displayCardDetailState = false"
 ></app-card-detail>
