@@ -1,6 +1,9 @@
 <div class="card-tile" #card>
   {{ currentCard.description }}
-  <button class="card-tile__edit-btn" (click)="openCardEditState()">
+  <button
+    class="card-tile__edit-btn test-card-tile__edit-btn"
+    (click)="openCardEditState()"
+  >
     <mat-icon>edit</mat-icon>
   </button>
 </div>
