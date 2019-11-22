@@ -19,13 +19,37 @@
     width: 77rem;
     z-index: 20;
     display: flex;
-    padding: 1rem;
+    padding: 2rem;
+    border-radius: 0.3rem;
   }
 
   &__data {
-    background-color: red;
     height: 30rem;
     flex: 3;
+  }
+
+  &__section {
+    display: flex;
+
+    & mat-icon {
+      margin-right: 1.5rem;
+      color: $grey-icon;
+    }
+
+    &__content {
+      flex: 1;
+
+      & span {
+        font-size: $font-size-small;
+      }
+    }
+  }
+
+  &__title {
+    color: $grey-font-color;
+    font-size: $font-size-title;
+    font-weight: 500;
+    margin-bottom: 1rem;
   }
 
   &__actions {
