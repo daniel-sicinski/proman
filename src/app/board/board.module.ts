@@ -11,6 +11,7 @@ import {
   redirectUnauthorizedTo,
   AngularFireAuthGuard
 } from "@angular/fire/auth-guard";
+import { CardDetailComponent } from './status/card-detail/card-detail.component';
 
 const redirectUnauthorizedToLogin = () =>
   redirectUnauthorizedTo(["auth", "logIn"]);
@@ -20,7 +21,8 @@ const redirectUnauthorizedToLogin = () =>
     BoardComponent,
     StatusComponent,
     CardEditComponent,
-    CardComponent
+    CardComponent,
+    CardDetailComponent
   ],
   imports: [
     CommonModule,
