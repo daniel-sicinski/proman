@@ -18,10 +18,11 @@
       (editStateChange)="cardEditState = $event"
       [cdkDragDisabled]="cardEditState"
       [connectedTo]="connectedTo"
+      class="test-app-status"
     >
     </app-status>
     <span
-      class="add-status-panel"
+      class="add-status-panel test-add-status-panel"
       [ngClass]="{
         'add-status-panel--show': !addingStatusState,
         'add-status-panel--hide': addingStatusState
@@ -32,7 +33,10 @@
       <mat-icon>add</mat-icon>
       <span>Add new list</span>
     </span>
-    <div class="new-status-modal" *ngIf="addingStatusState">
+    <div
+      class="new-status-modal test-new-status-modal"
+      *ngIf="addingStatusState"
+    >
       <form
         [formGroup]="newStatusForm"
         (ngSubmit)="onStatusAdd()"
@@ -67,4 +71,3 @@
     </div>
   </div>
 </div>
-<!-- <app-card-edit *ngIf="cardEditState"></app-card-edit> -->
