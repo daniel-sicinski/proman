@@ -44,7 +44,7 @@ export class BoardsService implements OnDestroy {
     this.userBoardsCollection.doc(boardId).delete();
   }
 
-  initializeDashboard(userSnapshot: firebase.User | null): void {
+  private initializeDashboard(userSnapshot: firebase.User | null): void {
     this.currentUserId = userSnapshot!.uid;
 
     this.userBoardsCollection = this.afs.collection<Board>(`boards`, ref =>

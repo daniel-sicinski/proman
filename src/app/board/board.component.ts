@@ -36,8 +36,8 @@ export class BoardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe((params: Params) => {
-      this.boardId = params["boardId"];
+    this.route.paramMap.subscribe((params: Params) => {
+      this.boardId = params.get("boardId");
       this.statusesService.getStatusesOfBoard(this.boardId);
 
       this.boardStatuses$ = this.statusesService.boardStatuses$.pipe(
