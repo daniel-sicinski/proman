@@ -9,8 +9,13 @@ import { Board } from "./models/Board";
 import { DashboardModule } from "./dashboard.module";
 import { RouterTestingModule } from "@angular/router/testing";
 import { Subject } from "rxjs";
-import { By } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import {
+  click,
+  dispatchInputEvent,
+  dispatchSubmitEvent
+} from "@testing/testing-helpers";
+import { PageHelper } from "@testing/page-helper";
 
 class BoardServiceMock {
   boardsSubject = new Subject<Board[]>();
@@ -19,12 +24,13 @@ class BoardServiceMock {
   addBoard = jasmine.createSpy("addBoardSpy");
 }
 
-fdescribe("DashboardComponent", () => {
+describe("DashboardComponent", () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
   let de: DebugElement;
   let authService: jasmine.SpyObj<AuthService>;
   let boardService: BoardServiceMock;
+  let page: Page;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -47,7 +53,7 @@ fdescribe("DashboardComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
-    de = fixture.debugElement;
+    page = new Page(fixture);
 
     authService = TestBed.get(AuthService);
     boardService = TestBed.get(BoardsService);
@@ -70,9 +76,7 @@ fdescribe("DashboardComponent", () => {
     // update view
     fixture.detectChanges();
 
-    const boardLinks = de.queryAll(By.css(".test-board-link"));
-
-    expect(boardLinks.length).toBe(2);
+    expect(page.boardLinks.length).toBe(2);
   });
 
   it("calling onLogOut() should call logOut() method from AuthService", () => {
@@ -83,17 +87,12 @@ fdescribe("DashboardComponent", () => {
 
   describe("Adding new dashboard", () => {
     it("displays form modal on btn click", () => {
-      const button = de.query(By.css(".test-add-board-btn"))
-        .nativeElement as HTMLButtonElement;
-
-      button.dispatchEvent(newEvent("click"));
+      click(page.addDashboardBtn);
 
       fixture.detectChanges();
 
-      const newBoardModal = de.query(By.css(".test-new-board-modal"));
-
-      expect(newBoardModal).toBeDefined();
-      expect(newBoardModal).not.toBeNull();
+      expect(page.newBoardModal).toBeDefined();
+      expect(page.newBoardModal).not.toBeNull();
     });
   });
 
@@ -104,14 +103,10 @@ fdescribe("DashboardComponent", () => {
 
     fixture.detectChanges();
 
-    const formInput = de.query(By.css("form input"))
-      .nativeElement as HTMLInputElement;
-    formInput.value = newBoardTitle;
-    formInput.dispatchEvent(newEvent("input"));
+    page.newBoardInput.value = newBoardTitle;
+    dispatchInputEvent(page.newBoardInput);
 
-    const formElement = de.query(By.css("form"))
-      .nativeElement as HTMLFormElement;
-    formElement.dispatchEvent(newEvent("submit"));
+    dispatchSubmitEvent(page.newBoardForm);
 
     expect(boardService.addBoard).toHaveBeenCalledTimes(1);
     expect(boardService.addBoard).toHaveBeenCalledWith(newBoardTitle);
@@ -122,9 +117,7 @@ fdescribe("DashboardComponent", () => {
 
     fixture.detectChanges();
 
-    const newBoardModal = de.query(By.css(".test-new-board-modal"));
-
-    expect(newBoardModal).toBeNull();
+    expect(page.newBoardModal).toBeNull();
     expect(component.newBoardForm.value.title).toBeNull();
   });
 });
@@ -137,6 +130,27 @@ function userFactory(title: string, userId: string, boardId: string) {
   };
 }
 
-function newEvent(eventName: string) {
-  return new Event(eventName);
+class Page extends PageHelper<DashboardComponent> {
+  get addDashboardBtn() {
+    return this.query<HTMLButtonElement>(".test-add-board-btn");
+  }
+  get boardLinks() {
+    return this.queryAll<HTMLElement>(".test-board-link");
+  }
+
+  get newBoardModal() {
+    return this.query<HTMLDivElement>(".test-new-board-modal");
+  }
+
+  get newBoardForm() {
+    return this.query<HTMLFormElement>("form");
+  }
+
+  get newBoardInput() {
+    return this.query<HTMLInputElement>("form input");
+  }
+
+  constructor(public fixture: ComponentFixture<DashboardComponent>) {
+    super(fixture);
+  }
 }
