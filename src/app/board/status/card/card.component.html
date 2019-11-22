@@ -1,15 +1,20 @@
-<div class="card-tile" #card>
+<div class="card-tile" #card (click)="displayCardDetailState = true">
   {{ currentCard.description }}
   <button
     class="card-tile__edit-btn test-card-tile__edit-btn"
-    (click)="openCardEditState()"
+    (click)="openEditCardTitleState($event)"
   >
     <mat-icon>edit</mat-icon>
   </button>
 </div>
 <app-card-edit
-  *ngIf="cardEditState"
+  *ngIf="editCardTitleState"
   [cardPosition]="cardPosition"
   [editedCard]="currentCard"
-  (closeEditState)="closeCardEditState()"
+  (closeEditCardTitleState)="closeEditCardTitleState()"
 ></app-card-edit>
+<app-card-detail
+  *ngIf="displayCardDetailState"
+  [editedCard]="currentCard"
+  (closeDisplayCardDetailState)="displayCardDetailState = false"
+></app-card-detail>

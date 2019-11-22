@@ -15,13 +15,14 @@ import { Card } from "./models/Card";
   styleUrls: ["./card.component.scss"]
 })
 export class CardComponent implements OnInit {
-  cardPosition: ClientRect | DOMRect;
   @Input() currentCard: Card;
-  cardEditState: boolean;
   @Output() editStateChange = new EventEmitter<boolean>();
-
   @ViewChild("card", { static: false })
   card: ElementRef;
+
+  editCardTitleState: boolean;
+  displayCardDetailState: boolean;
+  cardPosition: ClientRect | DOMRect;
 
   constructor() {}
 
@@ -31,13 +32,15 @@ export class CardComponent implements OnInit {
     this.cardPosition = this.card.nativeElement.getBoundingClientRect();
   }
 
-  openCardEditState(): void {
+  openEditCardTitleState(e: Event): void {
+    e.stopPropagation();
+
     this.editStateChange.emit(true);
-    this.cardEditState = true;
+    this.editCardTitleState = true;
   }
 
-  closeCardEditState(): void {
+  closeEditCardTitleState(): void {
     this.editStateChange.emit(false);
-    this.cardEditState = false;
+    this.editCardTitleState = false;
   }
 }

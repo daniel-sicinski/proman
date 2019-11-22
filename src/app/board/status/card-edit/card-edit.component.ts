@@ -18,7 +18,7 @@ import { Card } from "../card/models/Card";
   styleUrls: ["./card-edit.component.scss"]
 })
 export class CardEditComponent implements OnInit {
-  @Output() closeEditState = new EventEmitter<void>();
+  @Output() closeEditCardTitleState = new EventEmitter<void>();
   @ViewChild("cardEditContainer", { static: false })
   cardEditContainer: ElementRef;
 
@@ -62,10 +62,10 @@ export class CardEditComponent implements OnInit {
         "card-edit__wrapper"
       );
       if (clickedOuterBound) {
-        this.closeEditState.emit();
+        this.closeEditCardTitleState.emit();
       }
     } else {
-      this.closeEditState.emit();
+      this.closeEditCardTitleState.emit();
     }
   }
 
