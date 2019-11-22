@@ -1,6 +1,12 @@
 // Fonts
 $main-font: "Roboto", "Helvetica Neue", sans-serif;
 
+// Font size
+$font-size-title: 1.8rem;
+$font-size-subtitle: 1.6rem;
+$font-size-regular: 1.4rem;
+$font-size-small: 1.2rem;
+
 // Colors
 $grey-primary: rgb(240, 240, 240);
 $grey-secondary: rgb(214, 214, 214);
@@ -8,3 +14,4 @@ $grey-tertiary: rgb(155, 155, 155);
 
 $grey-icon: rgb(88, 88, 88);
 $grey-font-color: rgb(71, 71, 71);
+$grey-font-color-light: rgb(88, 88, 88);
