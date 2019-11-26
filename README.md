@@ -1,10 +1,22 @@
 # PromanNg
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.6.
+This is a personal project, aimed at practicing building Angular apps. The app provides basic functionalities of a kanban board app (like Trello). The app is built in Angular on the front end, and uses cloud no-sql database solution provided by Firebase. I'm also using the app to practice testing using Karma and Jasmine. I'm regularly adding new features to the app.
 
-## Development server
+## Implemented functionalities
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+* User can create account and login
+* User can create and review personal boards
+* User can CRUD lists with statuses
+* User can create, review and delete cards with tasks
+* Using drag & drop user can switch order of cards, as well as lists with statuses
+
+## Technologies used
+
+* Angular 8. 
+* Angular-Material
+* Cloud Firestore
+* Angular-fire
+* Karma / Jasmine
 
 ## Code scaffolding
 
@@ -18,10 +30,3 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
