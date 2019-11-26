@@ -25,7 +25,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     password: [null, Validators.required]
   });
 
-  private authForm = this.signUpForm;
+  authForm = this.signUpForm;
 
   readonly updateErrorMessageSub: Subscription = this.authService.authErrorMessage$.subscribe(
     errorMessage => {

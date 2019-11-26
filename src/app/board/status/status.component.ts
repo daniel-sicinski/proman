@@ -17,7 +17,7 @@ import { tap } from "rxjs/operators";
 })
 export class StatusComponent implements OnInit {
   private _status: Status;
-  private statusName: string;
+  statusName: string;
   private numberOfCards: number;
 
   isNameEditVisible = false;
