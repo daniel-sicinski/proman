@@ -2,6 +2,10 @@
 
 This is a personal project, aimed at practicing building Angular apps. The app provides basic functionalities of a kanban board app (like Trello). The app is built in Angular on the front end, and uses cloud no-sql database solution provided by Firebase. I'm also using the app to practice testing using Karma and Jasmine. I'm regularly adding new features to the app.
 
+Link to the app:
+
+https://proman-ng.herokuapp.com/
+
 ## Implemented functionalities
 
 * User can create account and login
