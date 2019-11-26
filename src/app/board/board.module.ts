@@ -4,14 +4,17 @@ import { StatusComponent } from "./status/status.component";
 import { CardEditComponent } from "./status/card-edit/card-edit.component";
 import { CardComponent } from "./status/card/card.component";
 import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { SharedModule } from "../shared/shared.module";
 import { RouterModule } from "@angular/router";
 import {
   redirectUnauthorizedTo,
   AngularFireAuthGuard
 } from "@angular/fire/auth-guard";
-import { CardDetailComponent } from './status/card-detail/card-detail.component';
+import { CardDetailComponent } from "./status/card-detail/card-detail.component";
+import { InputToggleComponent } from "./shared_features/input_toggle/input-toggle.component";
+import { ToggleButtonSmallComponent } from "./shared_features/input_toggle/toogle_buttons/toggle-button-small/toggle-button-small.component";
+import { InputSmallComponent } from "./shared_features/input_toggle/inputs/input-small/input-small.component";
 
 const redirectUnauthorizedToLogin = () =>
   redirectUnauthorizedTo(["auth", "logIn"]);
@@ -22,11 +25,15 @@ const redirectUnauthorizedToLogin = () =>
     StatusComponent,
     CardEditComponent,
     CardComponent,
-    CardDetailComponent
+    CardDetailComponent,
+    InputToggleComponent,
+    ToggleButtonSmallComponent,
+    InputSmallComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     SharedModule,
     RouterModule.forChild([
       {

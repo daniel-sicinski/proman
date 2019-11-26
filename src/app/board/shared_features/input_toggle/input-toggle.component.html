@@ -1,0 +1,29 @@
+<div>
+  <ng-container *ngIf="!inputAreaOpened">
+    <ng-content select="[toggleButton]"></ng-content>
+  </ng-container>
+  <ng-container *ngIf="inputAreaOpened">
+    <div class="input-area-modal">
+      <form #f="ngForm" (ngSubmit)="onFormSubmit(f)">
+        <ng-content select="[inputArea]"></ng-content>
+        <div class="input-area-modal__button-container">
+          <button
+            class="input-area-modal__submit-btn"
+            mat-raised-button
+            color="accent"
+            type="submit"
+          >
+            Save
+          </button>
+          <button
+            mat-icon-button
+            (click)="inputAreaOpened = false"
+            class="input-area-modal__close-btn"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-container>
+</div>

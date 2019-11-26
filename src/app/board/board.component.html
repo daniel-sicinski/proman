@@ -21,53 +21,15 @@
       class="test-app-status"
     >
     </app-status>
-    <span
-      class="add-status-panel test-add-status-panel"
-      [ngClass]="{
-        'add-status-panel--show': !addingStatusState,
-        'add-status-panel--hide': addingStatusState
-      }"
-      *ngIf="!addingStatusState"
-      (click)="addingStatusState = true"
-    >
-      <mat-icon>add</mat-icon>
-      <span>Add new list</span>
-    </span>
-    <div
-      class="new-status-modal test-new-status-modal"
-      *ngIf="addingStatusState"
-    >
-      <form
-        [formGroup]="newStatusForm"
-        (ngSubmit)="onStatusAdd()"
-        class="new-status-modal__form"
-      >
-        <input
-          class="new-status-modal__form-input"
-          matInput
-          placeholder="Add name of new list"
-          formControlName="name"
-          type="text"
-          autofocus
-        />
-        <div class="new-status-modal__button-container">
-          <button
-            class="new-status-modal__submit-btn"
-            mat-raised-button
-            color="accent"
-            type="submit"
-          >
-            Add list
-          </button>
-          <button
-            mat-icon-button
-            (click)="addingStatusState = false"
-            class="new-status-modal__close-btn"
-          >
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
-      </form>
-    </div>
+    <app-input-toggle>
+      <app-toggle-button-small toggleButton>
+        <mat-icon>add</mat-icon>
+        <span>Add new list</span>
+      </app-toggle-button-small>
+      <app-input-small
+        inputArea
+        [placeholder]="'Add new list'"
+      ></app-input-small>
+    </app-input-toggle>
   </div>
 </div>

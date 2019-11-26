@@ -1,4 +1,12 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ContentChild,
+  AfterContentInit,
+  ViewChild,
+  AfterViewInit
+} from "@angular/core";
 import { StatusesService } from "./services/statuses.service";
 import { Observable } from "rxjs/internal/Observable";
 import { ActivatedRoute, Params } from "@angular/router";
@@ -7,6 +15,10 @@ import { AuthService } from "../core/services/auth.service";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Status } from "./models/Status";
 import { tap } from "rxjs/operators";
+import {
+  INPUT_TOGGLE,
+  InputToggle
+} from "./shared_features/input_toggle/models/input-toggle-models";
 
 @Component({
   selector: "app-board",
@@ -14,24 +26,22 @@ import { tap } from "rxjs/operators";
   styleUrls: ["./board.component.scss"],
   providers: [StatusesService]
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, AfterViewInit {
   private statusesNumber: number;
 
   boardStatuses$: Observable<Status[]>;
   boardId: string;
-  addingStatusState = false;
+  // addingStatusState = false;
   cardEditState = false;
 
   connectedTo: (string | undefined)[] = [];
 
-  newStatusForm = this.fb.group({
-    name: [null, Validators.required]
-  });
+  @ViewChild(INPUT_TOGGLE as any, { static: false })
+  inputToggle: InputToggle;
 
   constructor(
     private statusesService: StatusesService,
     private route: ActivatedRoute,
-    private fb: FormBuilder,
     private authService: AuthService
   ) {}
 
@@ -49,15 +59,17 @@ export class BoardComponent implements OnInit {
     });
   }
 
-  onStatusAdd(): void {
-    if (!this.newStatusForm.valid) return;
+  public ngAfterViewInit(): void {
+    this.inputToggle.formSubmitted.subscribe((inputValue: string) =>
+      this.onStatusAdd(inputValue)
+    );
+  }
 
-    const { name } = this.newStatusForm.value;
+  onStatusAdd(inputValue: string): void {
     const orderValue = this.statusesNumber + 1;
-    this.statusesService.addStatus({ name, order: orderValue });
+    this.statusesService.addStatus({ name: inputValue, order: orderValue });
 
-    this.addingStatusState = false;
-    this.newStatusForm.reset();
+    // this.addingStatusState = false;
   }
 
   trackByStatuses(index: number, status: Status): string | undefined {
