@@ -15,6 +15,8 @@ import { CardDetailComponent } from "./status/card-detail/card-detail.component"
 import { InputToggleComponent } from "./shared_features/input_toggle/input-toggle.component";
 import { ToggleButtonSmallComponent } from "./shared_features/input_toggle/toogle_buttons/toggle-button-small/toggle-button-small.component";
 import { InputSmallComponent } from "./shared_features/input_toggle/inputs/input-small/input-small.component";
+import { InputTextareaComponent } from "./shared_features/input_toggle/inputs/input-textarea/input-textarea.component";
+import { TextButtonComponent } from "./shared_features/input_toggle/toogle_buttons/text-button/text-button.component";
 
 const redirectUnauthorizedToLogin = () =>
   redirectUnauthorizedTo(["auth", "logIn"]);
@@ -28,7 +30,9 @@ const redirectUnauthorizedToLogin = () =>
     CardDetailComponent,
     InputToggleComponent,
     ToggleButtonSmallComponent,
-    InputSmallComponent
+    InputSmallComponent,
+    InputTextareaComponent,
+    TextButtonComponent
   ],
   imports: [
     CommonModule,
