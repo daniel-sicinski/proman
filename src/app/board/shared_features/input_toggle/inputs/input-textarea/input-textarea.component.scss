@@ -1,0 +1,19 @@
+@import "src/styles/variables";
+
+textarea {
+  background-color: white;
+  border-radius: 0.3rem;
+  border: 1px solid blue;
+  font-family: $main-font;
+  font-size: $font-size-subtitle;
+  color: $grey-font-color;
+  padding: 1rem;
+  overflow: hidden;
+  width: 100%;
+
+  &::-webkit-input-placeholder {
+    font-size: $font-size-regular;
+    font-family: inherit;
+    color: $grey-font-color-light;
+  }
+}
