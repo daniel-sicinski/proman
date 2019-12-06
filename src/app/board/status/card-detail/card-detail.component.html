@@ -19,7 +19,18 @@
         >
         <div class="card-detail__content">
           <h3 class="card-detail__title">Description</h3>
-          <p>here goes toggled input component</p>
+          <app-input-toggle>
+            <app-text-button
+              toggleButton
+              [cardDescription]="currentCard.description"
+            >
+            </app-text-button>
+            <app-input-textarea
+              inputArea
+              [placeholder]="'Provide description'"
+              [inputValue]="currentCard.description"
+            ></app-input-textarea>
+          </app-input-toggle>
         </div>
       </div>
     </div>
